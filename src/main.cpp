@@ -2,6 +2,7 @@
 
 #include "game.cpp"
 #include "shader.cpp"
+#include "texture.cpp"
 #include "glcheck.cpp"
 
 int main() {
