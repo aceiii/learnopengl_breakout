@@ -20,6 +20,9 @@ set(LIBS ${LIBS} ${GLEW_LIBRARY})
 find_library(SOIL_LIBRARY soil REQUIRED)
 set(LIBS ${LIBS} ${SOIL_LIBRARY})
 
+find_library(GLFW_LIBRARY glfw3 REQUIRED)
+set(LIBS ${LIBS} ${GLFW_LIBRARY})
+
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
