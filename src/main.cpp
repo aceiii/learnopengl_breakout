@@ -4,6 +4,7 @@
 #include "shader.cpp"
 #include "texture.cpp"
 #include "gl_check.cpp"
+#include "sprite_renderer.cpp"
 #include "resource_manager.cpp"
 
 
