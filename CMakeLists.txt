@@ -14,6 +14,9 @@ if(APPLE)
     set(LIBS ${LIBS} ${OPENGL_LIBRARY} ${COCOA_LIBRARY})
 endif()
 
+find_library(GLEW_LIBRARY glew REQUIRED)
+set(LIBS ${LIBS} ${GLEW_LIBRARY})
+
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
