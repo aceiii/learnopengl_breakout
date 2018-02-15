@@ -1,5 +1,5 @@
 #include "texture.h"
-#include "glcheck.h"
+#include "gl_check.h"
 
 Texture2D::Texture2D()
     : width {0}, height {0},

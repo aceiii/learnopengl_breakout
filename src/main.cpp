@@ -3,7 +3,7 @@
 #include "game.cpp"
 #include "shader.cpp"
 #include "texture.cpp"
-#include "glcheck.cpp"
+#include "gl_check.cpp"
 #include "resource_manager.cpp"
 
 

@@ -1,5 +1,5 @@
 #include "shader.h"
-#include "glcheck.h"
+#include "gl_check.h"
 
 Shader::Shader() {
 }

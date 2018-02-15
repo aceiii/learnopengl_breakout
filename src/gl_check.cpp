@@ -1,4 +1,4 @@
-#include "glcheck.h"
+#include "gl_check.h"
 #include <iostream>
 
 void checkOpenglError(const char *statement, const char *file, int line) {
