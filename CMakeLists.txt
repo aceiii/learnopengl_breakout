@@ -6,6 +6,8 @@ project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
+
 set(SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/main.cpp)
 
 if(APPLE)
