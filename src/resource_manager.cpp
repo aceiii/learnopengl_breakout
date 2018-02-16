@@ -31,12 +31,12 @@ Shader ResourceManager::getShader(const std::string &name) {
     return shaders[name];
 }
 
-Texture2D ResourceManager::loadTexture(const char *filename, bool alpha, const std::string &name) {
+Texture2D& ResourceManager::loadTexture(const char *filename, bool alpha, const std::string &name) {
     textures[name] = loadTextureFromFile(filename, alpha);
     return textures[name];
 }
 
-Texture2D ResourceManager::getTexture(const std::string &name) {
+Texture2D& ResourceManager::getTexture(const std::string &name) {
     return textures[name];
 }
 

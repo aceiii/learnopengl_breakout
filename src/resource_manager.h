@@ -18,8 +18,8 @@ public:
     static Shader loadShader(const char *vs_filename, const char *fs_filename, const char *gs_filename, const std::string &name);
     static Shader getShader(const std::string &name);
 
-    static Texture2D loadTexture(const char *filename, bool alpha, const std::string &name);
-    static Texture2D getTexture(const std::string &name);
+    static Texture2D& loadTexture(const char *filename, bool alpha, const std::string &name);
+    static Texture2D& getTexture(const std::string &name);
 
     static void clear();
 
