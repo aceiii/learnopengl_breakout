@@ -8,6 +8,8 @@
 #include "resource_manager.cpp"
 #include "game_object.cpp"
 #include "game_level.cpp"
+#include "ball_object.cpp"
+
 
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
 
