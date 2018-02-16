@@ -4,6 +4,11 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "game_level.h"
+
+
+const glm::vec2 PLAYER_SIZE {100, 20};
+const GLfloat PLAYER_VELOCITY {500.0f};
 
 enum GameState {
     GAME_ACTIVE,
@@ -14,6 +19,8 @@ enum GameState {
 class Game {
 public:
     GameState state;
+    std::vector<GameLevel> levels;
+    GLuint level;
     GLboolean keys[1024];
     GLuint width, height;
 

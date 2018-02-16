@@ -6,7 +6,8 @@
 #include "gl_check.cpp"
 #include "sprite_renderer.cpp"
 #include "resource_manager.cpp"
-
+#include "game_object.cpp"
+#include "game_level.cpp"
 
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
 
