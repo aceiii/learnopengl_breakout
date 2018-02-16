@@ -1,6 +1,7 @@
 #ifndef __GL_CHECK_HEADER_GUARD__
 #define __GL_CHECK_HEADER_GUARD__
 
+#include <GL/glew.h>
 
 #define GL_CHECK(stmt) do {\
         stmt; \
