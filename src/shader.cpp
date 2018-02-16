@@ -152,9 +152,9 @@ void Shader::checkCompileErrors(GLuint object, const std::string &type) {
         }
     }
     else {
-        GL_CHECK(glGetShaderiv(object, GL_LINK_STATUS, &success));
+        GL_CHECK(glGetProgramiv(object, GL_LINK_STATUS, &success));
         if (!success) {
-            GL_CHECK(glGetShaderInfoLog(object, sizeof(info_log), nullptr, info_log));
+            GL_CHECK(glGetProgramInfoLog(object, sizeof(info_log), nullptr, info_log));
             std::cout << "| ERROR::SHADER: Link-time error: Type: " << type << '\n'
                 << info_log << "\n -- ---------------------------------------------------- -- \n";
         }
