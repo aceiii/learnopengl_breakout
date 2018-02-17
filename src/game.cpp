@@ -14,6 +14,21 @@ GLboolean checkCollisions(GameObject &a, GameObject &b) {
     return collision_x && collision_y;
 }
 
+GLboolean checkCollisions(BallObject &a, GameObject &b) {
+    glm::vec2 center {a.position + a.radius};
+    glm::vec2 aabb_half_extents {b.size.x / 2, b.size.y / 2};
+    glm::vec2 aabb_center {
+        b.position.x + aabb_half_extents.x,
+        b.position.y + aabb_half_extents.y};
+    glm::vec2 difference {center - aabb_center};
+    glm::vec2 clamped {glm::clamp(difference, -aabb_half_extents, aabb_half_extents)};
+    glm::vec2 closest {aabb_center + clamped};
+
+    difference = closest - center;
+
+    return glm::length(difference) < a.radius;
+}
+
 Game::Game(GLuint width_, GLuint height_)
     : state {GAME_ACTIVE}, keys {}, width {width_}, height {height_}
 {
