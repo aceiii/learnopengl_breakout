@@ -183,5 +183,19 @@ void Game::doCollisions() {
             }
         }
     }
+
+    Collision collision = checkCollisions(*ball, *player);
+    if (!ball->is_stuck && std::get<0>(collision)) {
+        GLfloat center_board = player->position.x + (player->size.x / 2);
+        GLfloat distance = (ball->position.x + ball->radius) - center_board;
+        GLfloat percentage = distance / (player->size.x / 2);
+
+        const GLfloat strength = 2.0f;
+        const glm::vec2 old_velocity = ball->velocity;
+
+        ball->velocity.x = INITIAL_BALL_VELOCITY.x * percentage * strength;
+        ball->velocity.y = -ball->velocity.y;
+        ball->velocity = glm::normalize(ball->velocity) * glm::length(old_velocity);
+    }
 }
 
