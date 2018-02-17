@@ -34,6 +34,8 @@ public:
     void processInput(GLfloat dt);
     void update(GLfloat dt);
     void render();
+
+    void doCollisions();
 };
 
 

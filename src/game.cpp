@@ -7,6 +7,13 @@ SpriteRenderer *renderer;
 GameObject *player;
 BallObject *ball;
 
+GLboolean checkCollisions(GameObject &a, GameObject &b) {
+    bool collision_x = a.position.x + a.size.x >= b.position.x && b.position.x + b.size.x >= a.position.x;
+    bool collision_y = a.position.y + a.size.y >= b.position.y && b.position.y + b.size.y >= a.position.y;
+
+    return collision_x && collision_y;
+}
+
 Game::Game(GLuint width_, GLuint height_)
     : state {GAME_ACTIVE}, keys {}, width {width_}, height {height_}
 {
@@ -83,6 +90,7 @@ void Game::processInput(GLfloat dt) {
 
 void Game::update(GLfloat dt) {
     ball->move(dt, width);
+    doCollisions();
 }
 
 void Game::render() {
@@ -94,6 +102,18 @@ void Game::render() {
 
         player->draw(*renderer);
         ball->draw(*renderer);
+    }
+}
+
+void Game::doCollisions() {
+    for (auto &box : levels[level].bricks) {
+        if (!box.is_destroyed) {
+            if (checkCollisions(*ball, box)) {
+                if (!box.is_solid) {
+                    box.is_destroyed = GL_TRUE;
+                }
+            }
+        }
     }
 }
 
