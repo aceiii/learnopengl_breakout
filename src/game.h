@@ -19,6 +19,15 @@ enum GameState {
     GAME_WIN,
 };
 
+enum Direction {
+    UP,
+    RIGHT,
+    DOWN,
+    LEFT,
+};
+
+typedef std::tuple<GLboolean, Direction, glm::vec2> Collision;
+
 class Game {
 public:
     GameState state;

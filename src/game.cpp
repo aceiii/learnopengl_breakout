@@ -7,14 +7,38 @@ SpriteRenderer *renderer;
 GameObject *player;
 BallObject *ball;
 
+Direction vectorDirection(glm::vec2 target) {
+    glm::vec2 compass[] = {
+        {0.0f, 1.0f},  // up
+        {1.0f, 0.0f},  // right
+        {0.0f, -1.0f}, // down
+        {-1.0f, 0.0f}, //left
+    };
+
+    GLfloat max {0.0f};
+    GLuint best_match = -1;
+
+    for (GLuint i = 0; i < 4; i += 1) {
+        GLfloat dot_product = glm::dot(glm::normalize(target), compass[i]);
+        if (dot_product > max) {
+            max = dot_product;
+            best_match = i;
+        }
+    }
+
+    return (Direction)best_match;
+}
+
+/*
 GLboolean checkCollisions(GameObject &a, GameObject &b) {
     bool collision_x = a.position.x + a.size.x >= b.position.x && b.position.x + b.size.x >= a.position.x;
     bool collision_y = a.position.y + a.size.y >= b.position.y && b.position.y + b.size.y >= a.position.y;
 
     return collision_x && collision_y;
 }
+*/
 
-GLboolean checkCollisions(BallObject &a, GameObject &b) {
+Collision checkCollisions(BallObject &a, GameObject &b) {
     glm::vec2 center {a.position + a.radius};
     glm::vec2 aabb_half_extents {b.size.x / 2, b.size.y / 2};
     glm::vec2 aabb_center {
@@ -26,7 +50,11 @@ GLboolean checkCollisions(BallObject &a, GameObject &b) {
 
     difference = closest - center;
 
-    return glm::length(difference) < a.radius;
+    if (glm::length(difference) <= a.radius) {
+        return std::make_tuple(GL_TRUE, vectorDirection(difference), difference);
+    }
+
+    return std::make_tuple(GL_FALSE, UP, glm::vec2 {0, 0});
 }
 
 Game::Game(GLuint width_, GLuint height_)
@@ -123,9 +151,34 @@ void Game::render() {
 void Game::doCollisions() {
     for (auto &box : levels[level].bricks) {
         if (!box.is_destroyed) {
-            if (checkCollisions(*ball, box)) {
+            Collision collision = checkCollisions(*ball, box);
+
+            if (std::get<0>(collision)) {
                 if (!box.is_solid) {
                     box.is_destroyed = GL_TRUE;
+                }
+
+                Direction dir = std::get<1>(collision);
+                glm::vec2 diff_vector = std::get<2>(collision);
+
+                if (dir == LEFT || dir == RIGHT) {
+                    ball->velocity.x = -ball->velocity.x;
+
+                    GLfloat penetration = ball->radius - std::abs(diff_vector.x);
+                    if (dir == LEFT) {
+                        ball->position.x += penetration;
+                    } else {
+                        ball->position.x -= penetration;
+                    }
+                } else {
+                    ball->velocity.y = -ball->velocity.y;
+
+                    GLfloat penetration = ball->radius - std::abs(diff_vector.y);
+                    if (dir == UP) {
+                        ball->position.y -= penetration;
+                    } else {
+                        ball->position.y += penetration;
+                    }
                 }
             }
         }
