@@ -29,14 +29,12 @@ Direction vectorDirection(glm::vec2 target) {
     return (Direction)best_match;
 }
 
-/*
 GLboolean checkCollisions(GameObject &a, GameObject &b) {
     bool collision_x = a.position.x + a.size.x >= b.position.x && b.position.x + b.size.x >= a.position.x;
     bool collision_y = a.position.y + a.size.y >= b.position.y && b.position.y + b.size.y >= a.position.y;
 
     return collision_x && collision_y;
 }
-*/
 
 Collision checkCollisions(BallObject &a, GameObject &b) {
     glm::vec2 center {a.position + a.radius};
@@ -133,7 +131,13 @@ void Game::processInput(GLfloat dt) {
 
 void Game::update(GLfloat dt) {
     ball->move(dt, width);
+
     doCollisions();
+
+    if (ball->position.y >= height) {
+        resetLevel();
+        resetPlayer();
+    }
 }
 
 void Game::render() {
@@ -197,5 +201,24 @@ void Game::doCollisions() {
         ball->velocity.y = -1 * abs(ball->velocity.y);
         ball->velocity = glm::normalize(ball->velocity) * glm::length(old_velocity);
     }
+}
+
+void Game::resetLevel() {
+    if (level == 0) {
+        levels[0].load("res/levels/one.level", width, height * 0.5f);
+    } else if (level == 1) {
+        levels[1].load("res/levels/two.level", width, height * 0.5f);
+    } else if (level == 2) {
+        levels[2].load("res/levels/three.level", width, height * 0.5f);
+    } else if (level == 3) {
+        levels[3].load("res/levels/four.level", width, height * 0.5f);
+    }
+}
+
+void Game::resetPlayer() {
+    player->size = PLAYER_SIZE;
+    player->position = glm::vec2(width / 2 - PLAYER_SIZE.x / 2, height - PLAYER_SIZE.y);
+
+    ball->reset(player->position + glm::vec2(PLAYER_SIZE.x / 2 - BALL_RADIUS, -(BALL_RADIUS * 2)), INITIAL_BALL_VELOCITY);
 }
 

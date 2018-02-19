@@ -45,6 +45,9 @@ public:
     void render();
 
     void doCollisions();
+
+    void resetLevel();
+    void resetPlayer();
 };
 
 
