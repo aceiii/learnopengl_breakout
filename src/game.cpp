@@ -2,10 +2,12 @@
 #include "resource_manager.h"
 #include "sprite_renderer.h"
 #include "ball_object.h"
+#include "particle_generator.h"
 
 SpriteRenderer *renderer;
 GameObject *player;
 BallObject *ball;
+ParticleGenerator *particles;
 
 Direction vectorDirection(glm::vec2 target) {
     glm::vec2 compass[] = {
@@ -65,20 +67,24 @@ Game::~Game() {
 
 void Game::init() {
     ResourceManager::loadShader("res/shaders/sprite_vs.glsl", "res/shaders/sprite_fs.glsl", nullptr, "sprite");
+    ResourceManager::loadShader("res/shaders/particle_vs.glsl", "res/shaders/particle_fs.glsl", nullptr, "particle");
 
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(width), static_cast<GLfloat>(height), 0.0f, -1.0f, 1.0f);
 
     ResourceManager::getShader("sprite").use().setInteger("image", 0);
-    ResourceManager::getShader("sprite").use().setMatrix4("projection", projection);
-
-    renderer = new SpriteRenderer(ResourceManager::getShader("sprite"));
+    ResourceManager::getShader("sprite").setMatrix4("projection", projection);
+    ResourceManager::getShader("particle").use().setInteger("image", 0);
+    ResourceManager::getShader("particle").setMatrix4("projection", projection);
 
     ResourceManager::loadTexture("res/textures/awesomeface.png", GL_TRUE, "face");
-
     ResourceManager::loadTexture("res/textures/background.jpg", GL_FALSE, "background");
     ResourceManager::loadTexture("res/textures/block.png", GL_FALSE, "block");
     ResourceManager::loadTexture("res/textures/block_solid.png", GL_FALSE, "block_solid");
     ResourceManager::loadTexture("res/textures/paddle.png", GL_TRUE, "paddle");
+    ResourceManager::loadTexture("res/textures/particle.png", GL_TRUE, "particle");
+
+    renderer = new SpriteRenderer(ResourceManager::getShader("sprite"));
+    particles = new ParticleGenerator(ResourceManager::getShader("particle"), ResourceManager::getTexture("particle"), 500);
 
     GameLevel one, two, three, four;
     one.load("res/levels/one.level", width, height * 0.5f);
@@ -92,10 +98,9 @@ void Game::init() {
     levels.push_back(four);
 
     glm::vec2 player_pos {width / 2 - PLAYER_SIZE.x / 2, height - PLAYER_SIZE.y};
+    glm::vec2 ball_pos {player_pos + glm::vec2 {PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2}};
 
     player = new GameObject {player_pos, PLAYER_SIZE, ResourceManager::getTexture("paddle")};
-
-    glm::vec2 ball_pos {player_pos + glm::vec2 {PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2}};
     ball = new BallObject {ball_pos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::getTexture("face")};
 }
 
@@ -131,6 +136,7 @@ void Game::processInput(GLfloat dt) {
 
 void Game::update(GLfloat dt) {
     ball->move(dt, width);
+    particles->update(dt, *ball, 2, glm::vec2(ball->radius / 2));
 
     doCollisions();
 
@@ -148,6 +154,7 @@ void Game::render() {
         levels[level].draw(*renderer);
 
         player->draw(*renderer);
+        particles->draw();
         ball->draw(*renderer);
     }
 }
