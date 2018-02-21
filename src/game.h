@@ -30,11 +30,12 @@ typedef std::tuple<GLboolean, Direction, glm::vec2> Collision;
 
 class Game {
 public:
-    GameState state;
-    std::vector<GameLevel> levels;
-    GLuint level;
-    GLboolean keys[1024];
-    GLuint width, height;
+    GameState state {GAME_ACTIVE};
+    std::vector<GameLevel> levels {};
+    GLuint level {0};
+    GLboolean keys[1024] {0};
+    GLuint width {0}, height {0};
+    GLfloat scale {1.0f};
 
     Game(GLuint width, GLuint height, GLfloat scale);
     ~Game();

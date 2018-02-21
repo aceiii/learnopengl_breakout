@@ -11,16 +11,16 @@
 class GameObject {
 public:
 
-    glm::vec2 position;
-    glm::vec2 size;
-    glm::vec2 velocity;
-    glm::vec3 color;
+    glm::vec2 position {0};
+    glm::vec2 size {0};
+    glm::vec2 velocity {0};
+    glm::vec3 color {0};
 
-    GLfloat rotation;
-    GLboolean is_solid;
-    GLboolean is_destroyed;
+    GLfloat rotation {0};
+    GLboolean is_solid {false};
+    GLboolean is_destroyed {false};
 
-    Texture2D sprite;
+    Texture2D sprite {};
 
     GameObject();
     GameObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec3 color = glm::vec3(1.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f));

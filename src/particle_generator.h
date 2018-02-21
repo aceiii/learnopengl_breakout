@@ -32,9 +32,10 @@ private:
 
     GLuint _vao;
     GLuint _amount;
-    std::vector<Particle> _particles;
-    Shader _shader;
-    Texture2D _texture;
+
+    std::vector<Particle> _particles {};
+    Shader _shader {};
+    Texture2D _texture {};
 
 };
 

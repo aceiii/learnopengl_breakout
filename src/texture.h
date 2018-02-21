@@ -6,12 +6,12 @@
 
 class Texture2D {
 public:
-    GLuint id;
-    GLuint width, height;
-    GLuint internal_format;
-    GLuint image_format;
-    GLuint wrap_s, wrap_t;
-    GLuint filter_min, filter_max;
+    GLuint id {0};
+    GLuint width {0}, height {0};
+    GLuint internal_format {0};
+    GLuint image_format {0};
+    GLuint wrap_s {0}, wrap_t {0};
+    GLuint filter_min {0}, filter_max {0};
 
     Texture2D();
     ~Texture2D();

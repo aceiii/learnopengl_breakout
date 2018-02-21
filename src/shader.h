@@ -10,7 +10,7 @@
 
 class Shader {
 public:
-    GLuint id;
+    GLuint id {0};
 
     Shader();
     ~Shader();
