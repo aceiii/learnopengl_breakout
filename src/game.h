@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "game_level.h"
+#include "powerup.h"
 
 
 const glm::vec2 PLAYER_SIZE {100, 20};
@@ -32,6 +33,7 @@ class Game {
 public:
     GameState state {GAME_ACTIVE};
     std::vector<GameLevel> levels {};
+    std::vector<PowerUp> powerups {};
     GLuint level {0};
     GLboolean keys[1024] {0};
     GLuint width {0}, height {0};
@@ -49,6 +51,9 @@ public:
 
     void resetLevel();
     void resetPlayer();
+
+    void spawnPowerUps(GameObject &block);
+    void updatePowerUps(GLfloat dt);
 };
 
 

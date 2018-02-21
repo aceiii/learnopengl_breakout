@@ -13,6 +13,7 @@
 #include "ball_object.cpp"
 #include "particle_generator.cpp"
 #include "post_process.cpp"
+#include "powerup.cpp"
 
 
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
