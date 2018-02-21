@@ -3,11 +3,14 @@
 #include "sprite_renderer.h"
 #include "ball_object.h"
 #include "particle_generator.h"
+#include "post_process.h"
 
 SpriteRenderer *renderer;
 GameObject *player;
 BallObject *ball;
 ParticleGenerator *particles;
+PostProcess *effects;
+GLfloat shake_time = 0.0f;
 
 Direction vectorDirection(glm::vec2 target) {
     glm::vec2 compass[] = {
@@ -68,6 +71,7 @@ Game::~Game() {
 void Game::init() {
     ResourceManager::loadShader("res/shaders/sprite_vs.glsl", "res/shaders/sprite_fs.glsl", nullptr, "sprite");
     ResourceManager::loadShader("res/shaders/particle_vs.glsl", "res/shaders/particle_fs.glsl", nullptr, "particle");
+    ResourceManager::loadShader("res/shaders/postprocessing_vs.glsl", "res/shaders/postprocessing_fs.glsl", nullptr, "postprocessing");
 
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(width), static_cast<GLfloat>(height), 0.0f, -1.0f, 1.0f);
 
@@ -85,6 +89,7 @@ void Game::init() {
 
     renderer = new SpriteRenderer(ResourceManager::getShader("sprite"));
     particles = new ParticleGenerator(ResourceManager::getShader("particle"), ResourceManager::getTexture("particle"), 500);
+    effects = new PostProcess(ResourceManager::getShader("postprocessing"), width, height);
 
     GameLevel one, two, three, four;
     one.load("res/levels/one.level", width, height * 0.5f);
@@ -131,14 +136,30 @@ void Game::processInput(GLfloat dt) {
         if (keys[GLFW_KEY_SPACE]) {
             ball->is_stuck = false;
         }
+
+        if (keys[GLFW_KEY_1]) {
+            effects->confuse = !effects->confuse;
+        }
+
+        if (keys[GLFW_KEY_2]) {
+            effects->chaos = !effects->chaos;
+        }
     }
 }
 
 void Game::update(GLfloat dt) {
     ball->move(dt, width);
-    particles->update(dt, *ball, 2, glm::vec2(ball->radius / 2));
 
     doCollisions();
+
+    particles->update(dt, *ball, 2, glm::vec2(ball->radius / 2));
+
+    if (shake_time > 0.0f) {
+        shake_time -= dt;
+        if (shake_time <= 0.0f) {
+            effects->shake = GL_FALSE;
+        }
+    }
 
     if (ball->position.y >= height) {
         resetLevel();
@@ -148,14 +169,19 @@ void Game::update(GLfloat dt) {
 
 void Game::render() {
     if (state == GAME_ACTIVE) {
-        renderer->drawSprite(ResourceManager::getTexture("background"),
-                glm::vec2(0, 0), glm::vec2(width, height), 0.0f);
 
-        levels[level].draw(*renderer);
+        effects->beginRender();
+        {
+            renderer->drawSprite(ResourceManager::getTexture("background"),
+                    glm::vec2(0, 0), glm::vec2(width, height), 0.0f);
 
-        player->draw(*renderer);
-        particles->draw();
-        ball->draw(*renderer);
+            levels[level].draw(*renderer);
+            player->draw(*renderer);
+            particles->draw();
+            ball->draw(*renderer);
+        }
+        effects->endRender();
+        effects->render(glfwGetTime());
     }
 }
 
@@ -167,6 +193,9 @@ void Game::doCollisions() {
             if (std::get<0>(collision)) {
                 if (!box.is_solid) {
                     box.is_destroyed = GL_TRUE;
+                } else {
+                    shake_time = 0.05f;
+                    effects->shake = GL_TRUE;
                 }
 
                 Direction dir = std::get<1>(collision);

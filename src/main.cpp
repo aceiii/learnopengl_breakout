@@ -11,6 +11,7 @@
 #include "game_level.cpp"
 #include "ball_object.cpp"
 #include "particle_generator.cpp"
+#include "post_process.cpp"
 
 
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
