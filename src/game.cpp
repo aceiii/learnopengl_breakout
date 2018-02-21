@@ -60,8 +60,8 @@ Collision checkCollisions(BallObject &a, GameObject &b) {
     return std::make_tuple(GL_FALSE, UP, glm::vec2 {0, 0});
 }
 
-Game::Game(GLuint width_, GLuint height_)
-    : state {GAME_ACTIVE}, keys {}, width {width_}, height {height_}
+Game::Game(GLuint width_, GLuint height_, GLfloat scale_)
+    : state {GAME_ACTIVE}, keys {}, width {width_}, height {height_}, scale {scale_}
 {
 }
 
@@ -89,7 +89,7 @@ void Game::init() {
 
     renderer = new SpriteRenderer(ResourceManager::getShader("sprite"));
     particles = new ParticleGenerator(ResourceManager::getShader("particle"), ResourceManager::getTexture("particle"), 500);
-    effects = new PostProcess(ResourceManager::getShader("postprocessing"), width, height);
+    effects = new PostProcess(ResourceManager::getShader("postprocessing"), width * scale, height * scale);
 
     GameLevel one, two, three, four;
     one.load("res/levels/one.level", width, height * 0.5f);

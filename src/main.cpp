@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include "util.h"
 #include "game.cpp"
@@ -19,7 +20,7 @@ void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 const GLuint SCREEN_WIDTH = 800;
 const GLuint SCREEN_HEIGHT = 600;
 
-Game breakout {SCREEN_WIDTH, SCREEN_HEIGHT};
+std::unique_ptr<Game> breakout {nullptr};
 
 int main() {
 
@@ -35,23 +36,30 @@ int main() {
 
     glfwMakeContextCurrent(window);
 
+    int fb_width, fb_height;
+    glfwGetFramebufferSize(window, &fb_width, &fb_height);
+
+    GLfloat fb_scale = std::min(fb_width / GLfloat(SCREEN_WIDTH), fb_height / GLfloat(SCREEN_HEIGHT));
+
+    breakout = std::make_unique<Game>(SCREEN_WIDTH, SCREEN_HEIGHT, fb_scale);
+
     glewExperimental = GL_TRUE;
     glewInit();
     glGetError();
 
     glfwSetKeyCallback(window, keyCallback);
 
-    GL_CHECK(glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+    GL_CHECK(glViewport(0, 0, SCREEN_WIDTH * fb_scale, SCREEN_HEIGHT * fb_scale));
     GL_CHECK(glEnable(GL_CULL_FACE));
     GL_CHECK(glEnable(GL_BLEND));
     GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-    breakout.init();
+    breakout->init();
 
     GLfloat delta_time = 0.0f;
     GLfloat last_frame = 0.0f;
 
-    breakout.state = GAME_ACTIVE;
+    breakout->state = GAME_ACTIVE;
 
     while (!glfwWindowShouldClose(window)) {
         GLfloat current_frame = glfwGetTime();
@@ -60,13 +68,13 @@ int main() {
 
         glfwPollEvents();
 
-        breakout.processInput(delta_time);
-        breakout.update(delta_time);
+        breakout->processInput(delta_time);
+        breakout->update(delta_time);
 
         GL_CHECK(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
         GL_CHECK(glClear(GL_COLOR_BUFFER_BIT));
 
-        breakout.render();
+        breakout->render();
 
         glfwSwapBuffers(window);
     }
@@ -88,10 +96,10 @@ void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 
     if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS) {
-            breakout.keys[key] = GL_TRUE;
+            breakout->keys[key] = GL_TRUE;
         }
         else if (action == GLFW_RELEASE) {
-            breakout.keys[key] = GL_FALSE;
+            breakout->keys[key] = GL_FALSE;
         }
     }
 }

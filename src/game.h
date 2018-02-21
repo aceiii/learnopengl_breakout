@@ -36,7 +36,7 @@ public:
     GLboolean keys[1024];
     GLuint width, height;
 
-    Game(GLuint width, GLuint height);
+    Game(GLuint width, GLuint height, GLfloat scale);
     ~Game();
 
     void init();
