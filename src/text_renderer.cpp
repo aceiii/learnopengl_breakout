@@ -8,7 +8,7 @@
 #include FT_FREETYPE_H
 
 TextRenderer::TextRenderer(GLuint width, GLuint height) {
-    text_shader = ResourceManager::loadShader("shaders/text_vs.glsl", "shaders/text_fs.glsl", nullptr, "text");
+    text_shader = ResourceManager::loadShader("res/shaders/text_vs.glsl", "res/shaders/text_fs.glsl", nullptr, "text");
     text_shader.setMatrix4("projection",  glm::ortho(0.0f, static_cast<GLfloat>(width), static_cast<GLfloat>(height), 0.0f), GL_TRUE);
     text_shader.setInteger("text", 0);
 
@@ -27,7 +27,7 @@ void TextRenderer::load(const std::string &font, GLuint font_size) {
     characters.clear();
 
     FT_Library ft;
-    if (!FT_Init_FreeType(&ft)) {
+    if (FT_Init_FreeType(&ft)) {
         std::cout << "ERROR::FREETYPE: Could not init FreeType Library\n";
     }
 
