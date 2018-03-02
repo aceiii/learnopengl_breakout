@@ -30,6 +30,10 @@ set(LIBS ${LIBS} ${GLFW_LIBRARY})
 find_library(SOLOUD_LIBRARY soloud REQUIRED)
 set(LIBS ${LIBS} ${SOLOUD_LIBRARY})
 
+find_package(Freetype REQUIRED)
+include_directories(${FREETYPE_INCLUDE_DIRS})
+set(LIBS ${LIBS} ${FREETYPE_LIBRARIES})
+
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
