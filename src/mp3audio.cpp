@@ -48,7 +48,7 @@ void MP3AudioInstance::getAudio(float *aBuffer, unsigned int aSamples) {
     const float *data[] = {left_data, right_data};
 
     while (written < aSamples) {
-        size_t to_write = std::min<size_t>(aSamples, num_samples - _offset);
+        size_t to_write = std::min<size_t>(aSamples - written, num_samples - _offset);
         for (size_t i = 0; i < mChannels; i += 1) {
             memcpy(aBuffer + i * aSamples, data[i] + _offset, sizeof(float) * to_write);
         }
@@ -65,6 +65,10 @@ void MP3AudioInstance::getAudio(float *aBuffer, unsigned int aSamples) {
             if (_offset >= num_samples) {
                 _offset = 0;
             }
+        }
+
+        if (_offset >= _audio->getSampleCount() && (mFlags & AudioSourceInstance::LOOPING)) {
+            _offset = 0;
         }
     }
 }
