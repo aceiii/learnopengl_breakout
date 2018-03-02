@@ -425,16 +425,16 @@ void Game::resetPlayer() {
 }
 
 void Game::spawnPowerUps(GameObject &block) {
-    if (shouldSpawn(15)) {
+    if (shouldSpawn(75)) {
         powerups.push_back({"speed", {0.5f, 0.5f, 1.0f}, 0.0f, block.position, ResourceManager::getTexture("powerup_speed")});
     }
-    if (shouldSpawn(15)) {
+    if (shouldSpawn(75)) {
         powerups.push_back({"sticky", {1.0f, 0.5f, 1.0f}, 20.0f, block.position, ResourceManager::getTexture("powerup_sticky")});
     }
-    if (shouldSpawn(15)) {
+    if (shouldSpawn(75)) {
         powerups.push_back({"pass-through", {0.5f, 1.0f, 0.5f}, 10.0f, block.position, ResourceManager::getTexture("powerup_passthrough")});
     }
-    if (shouldSpawn(15)) {
+    if (shouldSpawn(75)) {
         powerups.push_back({"pad-size-increase", {1.0f, 0.6f, 0.4f}, 0.0f, block.position, ResourceManager::getTexture("powerup_increase")});
     }
     if (shouldSpawn(15)) {
