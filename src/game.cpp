@@ -276,10 +276,17 @@ void Game::update(GLfloat dt) {
 
         resetPlayer();
     }
+
+    if (state == GAME_ACTIVE && levels[level].isCompleted()) {
+        resetLevel();
+        resetPlayer();
+        effects->chaos = GL_TRUE;
+        state = GAME_WIN;
+    }
 }
 
 void Game::render() {
-    if (state == GAME_ACTIVE || state == GAME_MENU) {
+    if (state == GAME_ACTIVE || state == GAME_MENU || state == GAME_WIN) {
 
         effects->beginRender();
         {
@@ -310,6 +317,11 @@ void Game::render() {
     if (state == GAME_MENU) {
         text->renderText("Press ENTER to start", 250.0f, height / 2.0, 1.0f);
         text->renderText("Press W or S to select a level", 245.0f, height / 2.0 + 20.0f, 0.75f);
+    }
+
+    if (state == GAME_WIN) {
+        text->renderText("YOU WON!!!1", 320.0f, (height / 2.0f) - 20.0f, 1.0f, glm::vec3 {0.0f, 1.0f, 0.0f});
+        text->renderText("Press ENTER to retry or ESC to quit", 130.0f, height / 2.0f, 1.0f, glm::vec3 {1.0f, 1.0f, 0.0f});
     }
 }
 
