@@ -15,6 +15,7 @@
 #include "post_process.cpp"
 #include "powerup.cpp"
 #include "mp3audio.cpp"
+#include "text_renderer.cpp"
 
 
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);

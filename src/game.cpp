@@ -6,6 +6,7 @@
 #include "post_process.h"
 #include "powerup.h"
 #include "mp3audio.h"
+#include "text_renderer.h"
 
 #include <soloud/soloud.h>
 #include <soloud/soloud_wav.h>
