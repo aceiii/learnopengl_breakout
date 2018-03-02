@@ -48,6 +48,15 @@ Shader ResourceManager::loadShaderFromFile(const char *vs_filename, const char *
     try {
         std::ifstream vs_file {vs_filename};
         std::ifstream fs_file {fs_filename};
+
+        if (!vs_file) {
+            std::cout << "ERROR::SHADER: Failed to read file '" << vs_filename << "'\n";
+        }
+
+        if (!fs_file) {
+            std::cout << "ERROR::SHADER: Failed to read file '" << fs_filename << "'\n";
+        }
+
         std::stringstream vs_stream, fs_stream;
 
         vs_stream << vs_file.rdbuf();
