@@ -11,12 +11,15 @@
 #include <soloud/soloud.h>
 #include <soloud/soloud_wav.h>
 
+#include <sstream>
+
 
 SpriteRenderer *renderer;
 GameObject *player;
 BallObject *ball;
 ParticleGenerator *particles;
 PostProcess *effects;
+TextRenderer *text;
 GLfloat shake_time = 0.0f;
 SoLoud::Soloud soloud;
 MP3Audio music_bg;
@@ -118,7 +121,7 @@ GLboolean isOtherPowerUpActive(std::vector<PowerUp> &powerups, const std::string
 }
 
 Game::Game(GLuint width_, GLuint height_, GLfloat scale_)
-    : state {GAME_ACTIVE}, keys {}, width {width_}, height {height_}, scale {scale_}
+    : state {GAME_MENU}, keys {}, width {width_}, height {height_}, scale {scale_}, lives {3}
 {
 }
 
@@ -155,6 +158,9 @@ void Game::init() {
     renderer = new SpriteRenderer(ResourceManager::getShader("sprite"));
     particles = new ParticleGenerator(ResourceManager::getShader("particle"), ResourceManager::getTexture("particle"), 500);
     effects = new PostProcess(ResourceManager::getShader("postprocessing"), width * scale, height * scale);
+
+    text = new TextRenderer(width, height);
+    text->load("res/fonts/ocraext.ttf", 24);
 
     GameLevel one, two, three, four;
     one.load("res/levels/one.level", width, height * 0.5f);
@@ -220,6 +226,28 @@ void Game::processInput(GLfloat dt) {
             effects->chaos = !effects->chaos;
         }
     }
+
+    if (state == GAME_MENU) {
+        if (keys[GLFW_KEY_ENTER] && !keys_processed[GLFW_KEY_ENTER]) {
+            keys_processed[GLFW_KEY_ENTER] = GL_TRUE;
+            state = GAME_ACTIVE;
+        }
+
+        if (keys[GLFW_KEY_W] && !keys_processed[GLFW_KEY_W]) {
+            keys_processed[GLFW_KEY_W] = GL_TRUE;
+            level = (level + 1) % levels.size();
+        }
+
+        if (keys[GLFW_KEY_S] && !keys_processed[GLFW_KEY_S]) {
+            keys_processed[GLFW_KEY_S] = GL_TRUE;
+            if (level > 0) {
+                level -= 1;
+            } else {
+                level = levels.size() - 1;
+            }
+        }
+
+    }
 }
 
 void Game::update(GLfloat dt) {
@@ -239,13 +267,19 @@ void Game::update(GLfloat dt) {
     }
 
     if (ball->position.y >= height) {
-        resetLevel();
+        lives -= 1;
+
+        if (lives == 0) {
+            resetLevel();
+            state = GAME_MENU;
+        }
+
         resetPlayer();
     }
 }
 
 void Game::render() {
-    if (state == GAME_ACTIVE) {
+    if (state == GAME_ACTIVE || state == GAME_MENU) {
 
         effects->beginRender();
         {
@@ -266,6 +300,16 @@ void Game::render() {
         }
         effects->endRender();
         effects->render(glfwGetTime());
+
+        std::stringstream ss;
+        ss << lives;
+
+        text->renderText("Lives: " + ss.str(), 5.0f, 5.0f, 1.0f);
+    }
+
+    if (state == GAME_MENU) {
+        text->renderText("Press ENTER to start", 250.0f, height / 2.0, 1.0f);
+        text->renderText("Press W or S to select a level", 245.0f, height / 2.0 + 20.0f, 0.75f);
     }
 }
 
@@ -357,6 +401,8 @@ void Game::resetLevel() {
     } else if (level == 3) {
         levels[3].load("res/levels/four.level", width, height * 0.5f);
     }
+
+    lives = 3;
 }
 
 void Game::resetPlayer() {

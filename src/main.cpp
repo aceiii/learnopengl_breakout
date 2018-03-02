@@ -62,8 +62,6 @@ int main() {
     GLfloat delta_time = 0.0f;
     GLfloat last_frame = 0.0f;
 
-    breakout->state = GAME_ACTIVE;
-
     while (!glfwWindowShouldClose(window)) {
         GLfloat current_frame = glfwGetTime();
         delta_time = current_frame - last_frame;
@@ -103,6 +101,7 @@ void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
         }
         else if (action == GLFW_RELEASE) {
             breakout->keys[key] = GL_FALSE;
+            breakout->keys_processed[key] = GL_FALSE;
         }
     }
 }

@@ -31,13 +31,15 @@ typedef std::tuple<GLboolean, Direction, glm::vec2> Collision;
 
 class Game {
 public:
-    GameState state {GAME_ACTIVE};
+    GameState state {GAME_MENU};
     std::vector<GameLevel> levels {};
     std::vector<PowerUp> powerups {};
     GLuint level {0};
-    GLboolean keys[1024] {0};
+    GLboolean keys[1024] {false};
+    GLboolean keys_processed[1024] {false};
     GLuint width {0}, height {0};
     GLfloat scale {1.0f};
+    GLuint lives {3};
 
     Game(GLuint width, GLuint height, GLfloat scale);
     ~Game();
