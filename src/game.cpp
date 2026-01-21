@@ -8,8 +8,8 @@
 #include "mp3audio.h"
 #include "text_renderer.h"
 
-#include <soloud/soloud.h>
-#include <soloud/soloud_wav.h>
+// #include <soloud/soloud.h>
+// #include <soloud/soloud_wav.h>
 
 #include <sstream>
 
@@ -21,12 +21,12 @@ ParticleGenerator *particles;
 PostProcess *effects;
 TextRenderer *text;
 GLfloat shake_time = 0.0f;
-SoLoud::Soloud soloud;
-MP3Audio music_bg;
-MP3Audio sfx_bleep1;
-SoLoud::Wav sfx_bleep2;
-SoLoud::Wav sfx_powerup;
-SoLoud::Wav sfx_solid;
+// SoLoud::Soloud soloud;
+// MP3Audio music_bg;
+// MP3Audio sfx_bleep1;
+// SoLoud::Wav sfx_bleep2;
+// SoLoud::Wav sfx_powerup;
+// SoLoud::Wav sfx_solid;
 
 Direction vectorDirection(glm::vec2 target) {
     glm::vec2 compass[] = {
@@ -129,7 +129,7 @@ Game::~Game() {
 }
 
 void Game::init() {
-    soloud.init();
+    // soloud.init();
 
     ResourceManager::loadShader("res/shaders/sprite_vs.glsl", "res/shaders/sprite_fs.glsl", nullptr, "sprite");
     ResourceManager::loadShader("res/shaders/particle_vs.glsl", "res/shaders/particle_fs.glsl", nullptr, "particle");
@@ -179,15 +179,15 @@ void Game::init() {
     player = new GameObject {player_pos, PLAYER_SIZE, ResourceManager::getTexture("paddle")};
     ball = new BallObject {ball_pos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::getTexture("face")};
 
-    music_bg.load("res/audio/breakout.mp3");
-    music_bg.setLooping(true);
-
-    sfx_bleep1.load("res/audio/bleep.mp3");
-    sfx_bleep2.load("res/audio/bleep.wav");
-    sfx_powerup.load("res/audio/powerup.wav");
-    sfx_solid.load("res/audio/solid.wav");
-
-    soloud.play(music_bg);
+    // music_bg.load("res/audio/breakout.mp3");
+    // music_bg.setLooping(true);
+    //
+    // sfx_bleep1.load("res/audio/bleep.mp3");
+    // sfx_bleep2.load("res/audio/bleep.wav");
+    // sfx_powerup.load("res/audio/powerup.wav");
+    // sfx_solid.load("res/audio/solid.wav");
+    //
+    // soloud.play(music_bg);
 }
 
 void Game::processInput(GLfloat dt) {
@@ -334,11 +334,11 @@ void Game::doCollisions() {
                 if (!box.is_solid) {
                     box.is_destroyed = GL_TRUE;
                     spawnPowerUps(box);
-                    soloud.play(sfx_bleep1);
+                    // soloud.play(sfx_bleep1);
                 } else {
                     shake_time = 0.05f;
                     effects->shake = GL_TRUE;
-                    soloud.play(sfx_solid);
+                    // soloud.play(sfx_solid);
                 }
 
                 Direction dir = std::get<1>(collision);
@@ -383,7 +383,7 @@ void Game::doCollisions() {
         ball->velocity = glm::normalize(ball->velocity) * glm::length(old_velocity);
         ball->is_stuck = ball->is_sticky;
 
-        soloud.play(sfx_bleep2);
+        // soloud.play(sfx_bleep2);
     }
 
     for (PowerUp &powerup : powerups) {
@@ -397,7 +397,7 @@ void Game::doCollisions() {
                 powerup.is_destroyed = GL_TRUE;
                 powerup.is_activated = GL_TRUE;
 
-                soloud.play(sfx_powerup);
+                // soloud.play(sfx_powerup);
             }
         }
     }

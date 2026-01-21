@@ -1,6 +1,7 @@
 #include "gl_check.h"
 #include <iostream>
 #include <unordered_map>
+#include <glad/glad.h>
 
 namespace {
     std::unordered_map<GLenum, const char*> error_map = {

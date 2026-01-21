@@ -1,10 +1,11 @@
 #include "resource_manager.h"
+#include "gl_check.h"
 
 #include <iostream>
 #include <sstream>
 #include <fstream>
 
-#include <SOIL.h>
+// #include <SOIL.h>
 
 std::map<std::string, Shader> ResourceManager::shaders;
 std::map<std::string, Texture2D> ResourceManager::textures;
@@ -94,17 +95,17 @@ Shader ResourceManager::loadShaderFromFile(const char *vs_filename, const char *
 
 Texture2D ResourceManager::loadTextureFromFile(const char *filename, bool alpha) {
     Texture2D texture;
-    if (alpha) {
-        texture.internal_format = GL_RGBA;
-        texture.image_format = GL_RGBA;
-    }
-
-    int width, height;
-    unsigned char *image = SOIL_load_image(filename, &width, &height, 0, texture.image_format == GL_RGBA ? SOIL_LOAD_RGBA : SOIL_LOAD_RGB);
-
-    texture.generate(width, height, image);
-
-    SOIL_free_image_data(image);
+    // if (alpha) {
+    //     texture.internal_format = GL_RGBA;
+    //     texture.image_format = GL_RGBA;
+    // }
+    //
+    // int width, height;
+    // unsigned char *image = SOIL_load_image(filename, &width, &height, 0, texture.image_format == GL_RGBA ? SOIL_LOAD_RGBA : SOIL_LOAD_RGB);
+    //
+    // texture.generate(width, height, image);
+    //
+    // SOIL_free_image_data(image);
 
     return texture;
 }

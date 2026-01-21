@@ -1,7 +1,7 @@
 #ifndef __TEXTURE_HEADER_GUARD__
 #define __TEXTURE_HEADER_GUARD__
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 
 class Texture2D {

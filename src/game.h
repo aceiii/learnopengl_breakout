@@ -1,7 +1,7 @@
 #ifndef __GAME_HEADER_GUARD__
 #define __GAME_HEADER_GUARD__
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "game_level.h"

@@ -1,7 +1,6 @@
 #ifndef __BALL_OBJECT_HEADER_GUARD__
 #define __BALL_OBJECT_HEADER_GUARD__
 
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 #include "game_object.h"

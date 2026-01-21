@@ -1,7 +1,6 @@
 #ifndef __POST_PROCESS_HEADER_GUARD__
 #define __POST_PROCESS_HEADER_GUARD__
 
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 #include "texture.h"

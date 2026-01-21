@@ -1,7 +1,6 @@
 #ifndef __GAME_LEVEL_HEADER_GUARD__
 #define __GAME_LEVEL_HEADER_GUARD__
 
-#include <GL/glew.h>
 #include <vector>
 
 #include "game_object.h"

@@ -1,7 +1,7 @@
 #ifndef __SPRITE_RENDERER_HEADER_GUARD__
 #define __SPRITE_RENDERER_HEADER_GUARD__
 
-#include <GL/glew.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 

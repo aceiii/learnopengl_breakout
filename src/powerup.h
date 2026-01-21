@@ -1,7 +1,7 @@
 #ifndef __POWER_UP_HEADER_GUARD__
 #define __POWER_UP_HEADER_GUARD__
 
-#include <GL/glew.h>
+
 #include <glm/glm.hpp>
 #include <string>
 

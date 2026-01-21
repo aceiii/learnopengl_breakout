@@ -1,4 +1,5 @@
 #include "game_level.h"
+#include "resource_manager.h"
 
 #include <vector>
 #include <fstream>

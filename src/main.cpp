@@ -1,21 +1,11 @@
 #include <iostream>
 #include <memory>
+#include <glad/glad.h>
 
 #include "util.h"
-#include "game.cpp"
-#include "shader.cpp"
-#include "texture.cpp"
-#include "gl_check.cpp"
-#include "sprite_renderer.cpp"
-#include "resource_manager.cpp"
-#include "game_object.cpp"
-#include "game_level.cpp"
-#include "ball_object.cpp"
-#include "particle_generator.cpp"
-#include "post_process.cpp"
-#include "powerup.cpp"
-#include "mp3audio.cpp"
-#include "text_renderer.cpp"
+#include "game.h"
+#include "resource_manager.h"
+#include "gl_check.h"
 
 
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
@@ -46,8 +36,8 @@ int main() {
 
     breakout = std::make_unique<Game>(SCREEN_WIDTH, SCREEN_HEIGHT, fb_scale);
 
-    glewExperimental = GL_TRUE;
-    glewInit();
+    // glewExperimental = GL_TRUE;
+    // glewInit();
     glGetError();
 
     glfwSetKeyCallback(window, keyCallback);

@@ -1,15 +1,22 @@
 #ifndef __MP3_AUDIO_HEADER_GUARD__
 #define __MP3_AUDIO_HEADER_GUARD__
 
-#include <soloud/soloud.h>
-#include <soloud/soloud_thread.h>
-#include <soloud/soloud_audiosource.h>
+#include <cstddef>
+#include <string>
+#include <vector>
+
+// #include <soloud/soloud.h>
+// #include <soloud/soloud_thread.h>
+// #include <soloud/soloud_audiosource.h>
+
 
 #include "minimp3.h"
 
 
 class MP3Audio;
-class MP3AudioInstance : public SoLoud::AudioSourceInstance {
+class MP3AudioInstance /*: public SoLoud::AudioSourceInstance */ {
+    using size_t = std::size_t;
+
 public:
     MP3AudioInstance(MP3Audio *audio);
     virtual ~MP3AudioInstance();
@@ -23,13 +30,13 @@ private:
 
 };
 
-class MP3Audio : public SoLoud::AudioSource {
+class MP3Audio /*: public SoLoud::AudioSource */ {
 public:
     MP3Audio();
     virtual ~MP3Audio();
 
     void load(const std::string &filename);
-    virtual SoLoud::AudioSourceInstance *createInstance();
+    // virtual SoLoud::AudioSourceInstance *createInstance();
 
     const float *getLeftSamples() const;
     const float *getRightSamples() const;
@@ -44,7 +51,6 @@ private:
     size_t _num_channels {0};
 
 };
-
 
 
 #endif//__MP3_AUDIO_HEADER_GUARD__

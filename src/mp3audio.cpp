@@ -2,6 +2,9 @@
 
 #include <array>
 #include <vector>
+#include <fstream>
+#include <iostream>
+
 
 typedef unsigned char byte;
 typedef std::vector<byte> byte_buffer_t;
@@ -28,66 +31,68 @@ byte_buffer_t loadFile(const std::string &filename) {
 
 
 MP3AudioInstance::MP3AudioInstance(MP3Audio *audio)
-    : SoLoud::AudioSourceInstance {},
-      _audio {audio}
+    // : SoLoud::AudioSourceInstance {},
+    //   _audio {audio}
 {
 }
 
 MP3AudioInstance::~MP3AudioInstance() {
 }
 
+
 void MP3AudioInstance::getAudio(float *aBuffer, unsigned int aSamples) {
-    if (!_audio) {
-        return;
-    }
-
-    size_t written = 0;
-    size_t num_samples = _audio->getSampleCount();
-    const float *left_data = _audio->getLeftSamples();
-    const float *right_data = _audio->getRightSamples();
-    const float *data[] = {left_data, right_data};
-
-    while (written < aSamples) {
-        size_t to_write = std::min<size_t>(aSamples - written, num_samples - _offset);
-        for (size_t i = 0; i < mChannels; i += 1) {
-            memcpy(aBuffer + i * aSamples, data[i] + _offset, sizeof(float) * to_write);
-        }
-
-        written += to_write;
-        _offset += to_write;
-
-        size_t left = aSamples - written;
-        if (left && !(mFlags & AudioSourceInstance::LOOPING)) {
-            for (size_t i = 0; i < mChannels; i += 1) {
-                memset(aBuffer + i * aSamples + written, 0, sizeof(float) * (aSamples - to_write));
-            }
-
-            if (_offset >= num_samples) {
-                _offset = 0;
-            }
-        }
-
-        if (_offset >= _audio->getSampleCount() && (mFlags & AudioSourceInstance::LOOPING)) {
-            _offset = 0;
-        }
-    }
+    // if (!_audio) {
+    //     return;
+    // }
+    //
+    // size_t written = 0;
+    // size_t num_samples = _audio->getSampleCount();
+    // const float *left_data = _audio->getLeftSamples();
+    // const float *right_data = _audio->getRightSamples();
+    // const float *data[] = {left_data, right_data};
+    //
+    // while (written < aSamples) {
+    //     size_t to_write = std::min<size_t>(aSamples - written, num_samples - _offset);
+    //     for (size_t i = 0; i < mChannels; i += 1) {
+    //         memcpy(aBuffer + i * aSamples, data[i] + _offset, sizeof(float) * to_write);
+    //     }
+    //
+    //     written += to_write;
+    //     _offset += to_write;
+    //
+    //     size_t left = aSamples - written;
+    //     if (left && !(mFlags & AudioSourceInstance::LOOPING)) {
+    //         for (size_t i = 0; i < mChannels; i += 1) {
+    //             memset(aBuffer + i * aSamples + written, 0, sizeof(float) * (aSamples - to_write));
+    //         }
+    //
+    //         if (_offset >= num_samples) {
+    //             _offset = 0;
+    //         }
+    //     }
+    //
+    //     if (_offset >= _audio->getSampleCount() && (mFlags & AudioSourceInstance::LOOPING)) {
+    //         _offset = 0;
+    //     }
+    // }
 }
 
 bool MP3AudioInstance::hasEnded() {
-    return !(mFlags & AudioSourceInstance::LOOPING) && _offset >= _audio->getSampleCount();
+    // return !(mFlags & AudioSourceInstance::LOOPING) && _offset >= _audio->getSampleCount();
 }
 
 
 MP3Audio::MP3Audio()
-    : SoLoud::AudioSource {}
+    // : SoLoud::AudioSource {}
 {
-    mp3dec_init(&_mp3d);
+    // mp3dec_init(&_mp3d);
 }
 
 MP3Audio::~MP3Audio() {
-    stop();
+    // stop();
 }
 
+/*
 void MP3Audio::load(const std::string &filename) {
     byte_buffer_t mp3_buffer = loadFile(filename);
     byte *buf = mp3_buffer.data();
@@ -143,3 +148,4 @@ size_t MP3Audio::getSampleCount() const {
     return _num_samples;
 }
 
+*/

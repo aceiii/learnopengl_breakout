@@ -1,3 +1,4 @@
+#include <iostream>
 #include "shader.h"
 #include "gl_check.h"
 

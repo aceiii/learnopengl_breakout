@@ -1,7 +1,6 @@
 #ifndef __GAME_OBJECT_HEADER_GUARD__
 #define __GAME_OBJECT_HEADER_GUARD__
 
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 #include "texture.h"
