@@ -21,9 +21,9 @@ public:
 private:
     void initRenderData();
 
-    unsigned int _msfbo;
-    unsigned int _fbo;
-    unsigned int _rbo;
-    unsigned int _vao;
+    unsigned int _msfbo{};
+    unsigned int _fbo{};
+    unsigned int _rbo{};
+    unsigned int _vao{};
 
 };

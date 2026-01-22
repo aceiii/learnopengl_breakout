@@ -6,13 +6,13 @@
 #include "resource_manager.h"
 #include "gl_check.h"
 
+namespace {
+    constexpr unsigned int SCREEN_WIDTH = 800;
+    constexpr unsigned int SCREEN_HEIGHT = 600;
+    std::unique_ptr<Game> breakout {nullptr};
+}
 
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
-
-const unsigned int SCREEN_WIDTH = 800;
-const unsigned int SCREEN_HEIGHT = 600;
-
-std::unique_ptr<Game> breakout {nullptr};
 
 int main() {
 
@@ -31,7 +31,7 @@ int main() {
     int fb_width, fb_height;
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
 
-    float fb_scale = std::min(fb_width / float(SCREEN_WIDTH), fb_height / float(SCREEN_HEIGHT));
+    float fb_scale = std::min(static_cast<float>(fb_width) / SCREEN_WIDTH, static_cast<float>(fb_height) / SCREEN_HEIGHT);
 
     breakout = std::make_unique<Game>(SCREEN_WIDTH, SCREEN_HEIGHT, fb_scale);
 
@@ -52,21 +52,21 @@ int main() {
     float last_frame = 0.0f;
 
     while (!glfwWindowShouldClose(window)) {
-        float current_frame = glfwGetTime();
-        delta_time = current_frame - last_frame;
-        last_frame = current_frame;
+       float current_frame = glfwGetTime();
+       delta_time = current_frame - last_frame;
+       last_frame = current_frame;
 
-        glfwPollEvents();
+       glfwPollEvents();
 
-        breakout->processInput(delta_time);
-        breakout->update(delta_time);
+       breakout->processInput(delta_time);
+       breakout->update(delta_time);
 
-        GL_CHECK(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-        GL_CHECK(glClear(GL_COLOR_BUFFER_BIT));
+       GL_CHECK(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+       GL_CHECK(glClear(GL_COLOR_BUFFER_BIT));
 
-        breakout->render();
-
-        glfwSwapBuffers(window);
+       breakout->render();
+ 
+       glfwSwapBuffers(window);
     }
 
     ResourceManager::clear();

@@ -7,6 +7,8 @@
 PostProcess::PostProcess(Shader shader_, unsigned int width_, unsigned int height_)
     : post_processing_shader {shader_}, width {width_}, height {height_}
 {
+    return;
+
     //std::cout << "PostProcess ( " << width << ',' << height << " )\n";
 
     GL_CHECK(glGenFramebuffers(1, &_msfbo));
