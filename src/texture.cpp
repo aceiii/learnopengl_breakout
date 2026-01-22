@@ -1,5 +1,7 @@
+#include <glad/glad.h>
 #include "texture.h"
 #include "gl_check.h"
+
 
 Texture2D::Texture2D()
     : width {0}, height {0},
@@ -10,10 +12,7 @@ Texture2D::Texture2D()
     GL_CHECK(glGenTextures(1, &id));
 }
 
-Texture2D::~Texture2D() {
-}
-
-void Texture2D::generate(GLuint width_, GLuint height_, unsigned char *data) {
+void Texture2D::generate(unsigned int width_, unsigned int height_, unsigned char *data) {
     width = width_;
     height = height_;
 

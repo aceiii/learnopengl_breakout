@@ -1,8 +1,6 @@
-#ifndef __TEXT_RENDERER_HEADER_GUARD__
-#define __TEXT_RENDERER_HEADER_GUARD__
+#pragma once
 
 #include <map>
-
 #include <glm/glm.hpp>
 
 #include "texture.h"
@@ -10,27 +8,24 @@
 
 
 struct Character {
-    GLuint texture_id;
+    unsigned int texture_id;
     glm::ivec2 size;
     glm::ivec2 bearing;
-    GLuint advance;
+    unsigned int advance;
 };
 
 class TextRenderer {
 public:
-    std::map<GLchar, Character> characters;
+    std::map<char, Character> characters;
     Shader text_shader;
 
-    TextRenderer(GLuint width, GLuint height);
+    TextRenderer(unsigned int width, unsigned int height);
 
-    void load(const std::string &font, GLuint font_size);
-    void renderText(const std::string &text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color = glm::vec3 {1.0f});
+    void load(const std::string &font, unsigned int font_size);
+    void renderText(const std::string &text, float x, float y, float scale, glm::vec3 color = glm::vec3 {1.0f});
 
 private:
-    GLuint _vao;
-    GLuint _vbo;
+    unsigned int _vao;
+    unsigned int _vbo;
 
 };
-
-
-#endif//__TEXT_RENDERER_HEADER_GUARD__

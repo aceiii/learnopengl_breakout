@@ -1,6 +1,4 @@
-#ifndef __POWER_UP_HEADER_GUARD__
-#define __POWER_UP_HEADER_GUARD__
-
+#pragma once
 
 #include <glm/glm.hpp>
 #include <string>
@@ -14,11 +12,8 @@ const glm::vec2 VELOCITY {0.0f, 150.0f};
 class PowerUp : public GameObject {
 public:
     std::string type {};
-    GLfloat duration {0};
-    GLboolean is_activated {false};
+    float duration {0};
+    bool is_activated {false};
 
-    PowerUp(const std::string &type, glm::vec3 color, GLfloat duration, glm::vec2 position, Texture2D texture);
+    PowerUp(const std::string &type, glm::vec3 color, float duration, glm::vec2 position, Texture2D texture);
 };
-
-
-#endif//__POWER_UP_HEADER_GUARD__

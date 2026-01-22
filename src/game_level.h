@@ -1,5 +1,4 @@
-#ifndef __GAME_LEVEL_HEADER_GUARD__
-#define __GAME_LEVEL_HEADER_GUARD__
+#pragma once
 
 #include <vector>
 
@@ -12,15 +11,12 @@ public:
 
     GameLevel();
 
-    void load(const GLchar *filename, GLuint level_width, GLuint level_height);
+    void load(const char *filename, unsigned int level_width, unsigned int level_height);
 
     void draw(SpriteRenderer &renderer);
 
-    GLboolean isCompleted();
+    bool isCompleted();
 
 private:
-    void init(std::vector<std::vector<GLuint>> tile_data, GLuint level_width, GLuint level_height);
+    void init(std::vector<std::vector<unsigned int>> tile_data, unsigned int level_width, unsigned int level_height);
 };
-
-
-#endif//__GAME_LEVEL_HEADER_GUARD__

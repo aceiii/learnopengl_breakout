@@ -8,15 +8,15 @@
 
 class BallObject : public GameObject {
 public:
-    GLfloat radius {1.0f};
-    GLboolean is_stuck {false};
-    GLboolean is_sticky {false};
-    GLboolean is_passthrough {false};
+    float radius {1.0f};
+    bool is_stuck {false};
+    bool is_sticky {false};
+    bool is_passthrough {false};
 
     BallObject();
-    BallObject(glm::vec2 position, GLfloat radius, glm::vec2 velocity, Texture2D sprite);
+    BallObject(glm::vec2 position, float radius, glm::vec2 velocity, Texture2D sprite);
 
-    glm::vec2 move(GLfloat dt, GLuint window_width);
+    glm::vec2 move(float dt, unsigned int window_width);
     void reset(glm::vec2 position, glm::vec2 velocity);
 };
 

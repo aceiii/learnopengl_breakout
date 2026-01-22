@@ -1,10 +1,6 @@
-#ifndef __POST_PROCESS_HEADER_GUARD__
-#define __POST_PROCESS_HEADER_GUARD__
-
-#include <glm/glm.hpp>
+#pragma once
 
 #include "texture.h"
-#include "sprite_renderer.h"
 #include "shader.h"
 
 
@@ -13,24 +9,21 @@ public:
     Shader post_processing_shader {};
     Texture2D texture {};
 
-    GLuint width {0}, height {0};
-    GLboolean confuse {false}, chaos {false}, shake {false};
+    unsigned int width {0}, height {0};
+    bool confuse {false}, chaos {false}, shake {false};
 
-    PostProcess(Shader shader, GLuint width, GLuint height);
+    PostProcess(Shader shader, unsigned int width, unsigned int height);
 
     void beginRender();
     void endRender();
-    void render(GLfloat time);
+    void render(float time);
 
 private:
     void initRenderData();
 
-    GLuint _msfbo;
-    GLuint _fbo;
-    GLuint _rbo;
-    GLuint _vao;
+    unsigned int _msfbo;
+    unsigned int _fbo;
+    unsigned int _rbo;
+    unsigned int _vao;
 
 };
-
-
-#endif//__POST_PROCESS_HEADER_GUARD__

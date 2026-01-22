@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include "sprite_renderer.h"
 #include "gl_check.h"
 
@@ -11,7 +12,7 @@ SpriteRenderer::~SpriteRenderer() {
     GL_CHECK(glDeleteVertexArrays(1, &_quad_vao));
 }
 
-void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size, GLfloat rotate, glm::vec3 color) {
+void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color) {
     _shader.use();
 
     glm::mat4 model;

@@ -1,14 +1,8 @@
-#ifndef __MP3_AUDIO_HEADER_GUARD__
-#define __MP3_AUDIO_HEADER_GUARD__
+#pragma once
 
 #include <cstddef>
 #include <string>
 #include <vector>
-
-// #include <soloud/soloud.h>
-// #include <soloud/soloud_thread.h>
-// #include <soloud/soloud_audiosource.h>
-
 
 #include "minimp3.h"
 
@@ -51,6 +45,3 @@ private:
     size_t _num_channels {0};
 
 };
-
-
-#endif//__MP3_AUDIO_HEADER_GUARD__

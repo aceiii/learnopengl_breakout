@@ -1,8 +1,6 @@
-#ifndef __PARTICLE_GENERATOR_HEADER_GUARD__
-#define __PARTICLE_GENERATOR_HEADER_GUARD__
+#pragma once
 
 #include <vector>
-
 #include <glm/glm.hpp>
 
 #include "shader.h"
@@ -14,29 +12,26 @@ struct Particle {
     glm::vec2 position {0.0f};
     glm::vec2 velocity {0.0f};
     glm::vec4 color {1.0f};
-    GLfloat life {0.0f};
+    float life {0.0f};
 };
 
 class ParticleGenerator {
 public:
-    ParticleGenerator(Shader shader, Texture2D texture, GLuint amount);
+    ParticleGenerator(Shader shader, Texture2D texture, unsigned int amount);
 
-    void update(GLfloat dt, GameObject &object, GLuint new_particles, glm::vec2 offset = {0.0f, 0.0f});
+    void update(float dt, GameObject &object, unsigned int new_particles, glm::vec2 offset = {0.0f, 0.0f});
     void draw();
 
 private:
     void init();
-    GLuint firstUnusedParticle();
+    unsigned int firstUnusedParticle();
     void respawnParticle(Particle &particle, GameObject &object, glm::vec2 offset = {0.0f, 0.0f});
 
-    GLuint _vao;
-    GLuint _amount;
+    unsigned int _vao;
+    unsigned int _amount;
 
     std::vector<Particle> _particles {};
     Shader _shader {};
     Texture2D _texture {};
 
 };
-
-
-#endif//__PARTICLE_GENERATOR_HEADER_GUARD__

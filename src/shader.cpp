@@ -1,15 +1,15 @@
 #include <iostream>
+#include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 #include "shader.h"
 #include "gl_check.h"
 
-Shader::Shader() {
-}
+Shader::Shader() = default;
 
-Shader::~Shader() {
-}
+Shader::~Shader() = default;
 
 void Shader::compile(const char *vs_source, const char *fs_source, const char *geom_source) {
-    GLuint shader_vertex, shader_fragment, shader_geom;
+    int shader_vertex, shader_fragment, shader_geom;
 
     GL_CHECK(shader_vertex = glCreateShader(GL_VERTEX_SHADER));
     GL_CHECK(glShaderSource(shader_vertex, 1, &vs_source, nullptr));
@@ -50,32 +50,32 @@ Shader& Shader::use() {
     return *this;
 }
 
-void Shader::setFloat(const char *name, GLfloat value, bool use_shader) {
+void Shader::setFloat(const char *name, float value, bool use_shader) {
     if (use_shader) {
         use();
     }
 
-    GLint loc;
+    int loc;
     GL_CHECK(loc = glGetUniformLocation(this->id, name));
     GL_CHECK(glUniform1f(loc, value));
 }
 
-void Shader::setInteger(const char *name, GLint value, bool use_shader) {
+void Shader::setInteger(const char *name, int value, bool use_shader) {
     if (use_shader) {
         use();
     }
 
-    GLint loc;
+    int loc;
     GL_CHECK(loc = glGetUniformLocation(this->id, name));
     GL_CHECK(glUniform1i(loc, value));
 }
 
-void Shader::setVector2f(const char *name, GLfloat x, GLfloat y, bool use_shader) {
+void Shader::setVector2f(const char *name, float x, float y, bool use_shader) {
     if (use_shader) {
         use();
     }
 
-    GLint loc;
+    int loc;
     GL_CHECK(loc = glGetUniformLocation(this->id, name));
     GL_CHECK(glUniform2f(loc, x, y));
 }
@@ -85,17 +85,17 @@ void Shader::setVector2f(const char *name, const glm::vec2 &value, bool use_shad
         use();
     }
 
-    GLint loc;
+    int loc;
     GL_CHECK(loc = glGetUniformLocation(this->id, name));
     GL_CHECK(glUniform2f(loc, value.x, value.y));
 }
 
-void Shader::setVector3f(const char *name, GLfloat x, GLfloat y, GLfloat z, bool use_shader) {
+void Shader::setVector3f(const char *name, float x, float y, float z, bool use_shader) {
     if (use_shader) {
         use();
     }
 
-    GLint loc;
+    int loc;
     GL_CHECK(loc = glGetUniformLocation(this->id, name));
     GL_CHECK(glUniform3f(loc, x, y, z));
 }
@@ -105,17 +105,17 @@ void Shader::setVector3f(const char *name, const glm::vec3 &value, bool use_shad
         use();
     }
 
-    GLint loc;
+    int loc;
     GL_CHECK(loc = glGetUniformLocation(this->id, name));
     GL_CHECK(glUniform3f(loc, value.x, value.y, value.z));
 }
 
-void Shader::setVector4f(const char *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w, bool use_shader) {
+void Shader::setVector4f(const char *name, float x, float y, float z, float w, bool use_shader) {
     if (use_shader) {
         use();
     }
 
-    GLint loc;
+    int loc;
     GL_CHECK(loc = glGetUniformLocation(this->id, name));
     GL_CHECK(glUniform4f(loc, x, y, z, w));
 }
@@ -125,7 +125,7 @@ void Shader::setVector4f(const char *name, const glm::vec4 &value, bool use_shad
         use();
     }
 
-    GLint loc;
+    int loc;
     GL_CHECK(loc = glGetUniformLocation(this->id, name));
     GL_CHECK(glUniform4f(loc, value.x, value.y, value.z, value.w));
 }
@@ -135,13 +135,13 @@ void Shader::setMatrix4(const char *name, const glm::mat4 &value, bool use_shade
         use();
     }
 
-    GLint loc;
+    int loc;
     GL_CHECK(loc = glGetUniformLocation(this->id, name));
     GL_CHECK(glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value)));
 }
 
-void Shader::checkCompileErrors(GLuint object, std::string_view type) {
-    GLint success;
+void Shader::checkCompileErrors(unsigned int object, std::string_view type) {
+    int success;
     GLchar info_log[1024];
 
     if (type != "PROGRAM") {

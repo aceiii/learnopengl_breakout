@@ -8,20 +8,20 @@
 GameLevel::GameLevel() {
 }
 
-void GameLevel::load(const GLchar *filename, GLuint level_width, GLuint level_height) {
+void GameLevel::load(const char *filename, unsigned int level_width, unsigned int level_height) {
     bricks.clear();
 
-    GLuint tile_code;
+    unsigned int tile_code;
     GameLevel level;
 
     std::string line;
     std::ifstream fstream {filename};
-    std::vector<std::vector<GLuint>> tile_data;
+    std::vector<std::vector<unsigned int>> tile_data;
 
     if (fstream) {
         while (std::getline(fstream, line)) {
             std::istringstream sstream(line);
-            std::vector<GLuint> row;
+            std::vector<unsigned int> row;
             while (sstream >> tile_code) {
                 row.push_back(tile_code);
             }
@@ -42,23 +42,23 @@ void GameLevel::draw(SpriteRenderer &renderer) {
     }
 }
 
-GLboolean GameLevel::isCompleted() {
+bool GameLevel::isCompleted() {
     for (auto &tile : bricks) {
         if (!tile.is_solid && !tile.is_destroyed) {
-            return GL_FALSE;
+            return false;
         }
     }
-    return GL_TRUE;
+    return true;
 }
 
-void GameLevel::init(std::vector<std::vector<GLuint>> tile_data, GLuint level_width, GLuint level_height) {
-    GLuint height = tile_data.size();
-    GLuint width = tile_data[0].size();
-    GLfloat unit_width = level_width / static_cast<GLfloat>(width);
-    GLfloat unit_height = level_height / height;
+void GameLevel::init(std::vector<std::vector<unsigned int>> tile_data, unsigned int level_width, unsigned int level_height) {
+    unsigned int height = tile_data.size();
+    unsigned int width = tile_data[0].size();
+    float unit_width = level_width / static_cast<float>(width);
+    float unit_height = level_height / height;
 
-    for (GLuint y = 0; y < height; y++) {
-        for (GLuint x = 0; x < width; x++) {
+    for (unsigned int y = 0; y < height; y++) {
+        for (unsigned int x = 0; x < width; x++) {
             if (tile_data[y][x] == 1) { // Solid
                 glm::vec2 pos(unit_width * x, unit_height * y);
                 glm::vec2 size(unit_width, unit_height);
@@ -68,7 +68,7 @@ void GameLevel::init(std::vector<std::vector<GLuint>> tile_data, GLuint level_wi
                     ResourceManager::getTexture("block_solid"),
                     glm::vec3(0.8f, 0.8f, 0.7f)};
 
-                obj.is_solid = GL_TRUE;
+                obj.is_solid = true;
 
                 bricks.push_back(obj);
             }

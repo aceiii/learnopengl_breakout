@@ -1,5 +1,4 @@
-#ifndef __GAME_OBJECT_HEADER_GUARD__
-#define __GAME_OBJECT_HEADER_GUARD__
+#pragma once
 
 #include <glm/glm.hpp>
 
@@ -15,9 +14,9 @@ public:
     glm::vec2 velocity {0};
     glm::vec3 color {0};
 
-    GLfloat rotation {0};
-    GLboolean is_solid {false};
-    GLboolean is_destroyed {false};
+    float rotation {0};
+    bool is_solid {false};
+    bool is_destroyed {false};
 
     Texture2D sprite {};
 
@@ -25,8 +24,4 @@ public:
     GameObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec3 color = glm::vec3(1.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f));
 
     virtual void draw(SpriteRenderer &renderer);
-
 };
-
-
-#endif//__GAME_OBJECT_HEADER_GUARD__

@@ -1,19 +1,20 @@
+#include <glad/glad.h>
 #include "particle_generator.h"
 #include "gl_check.h"
 
-ParticleGenerator::ParticleGenerator(Shader shader, Texture2D texture, GLuint amount)
+ParticleGenerator::ParticleGenerator(Shader shader, Texture2D texture, unsigned int amount)
     : _amount {amount}, _shader {shader}, _texture {texture}
 {
     init();
 }
 
-void ParticleGenerator::update(GLfloat dt, GameObject &object, GLuint new_particles, glm::vec2 offset) {
-    for (GLuint i = 0; i < new_particles; i += 1) {
+void ParticleGenerator::update(float dt, GameObject &object, unsigned int new_particles, glm::vec2 offset) {
+    for (unsigned int i = 0; i < new_particles; i += 1) {
         int unused_particle = firstUnusedParticle();
         respawnParticle(_particles[unused_particle], object, offset);
     }
 
-    for (GLuint i = 0; i < _amount; i += 1) {
+    for (unsigned int i = 0; i < _amount; i += 1) {
         Particle &p = _particles[i];
 
         p.life -= dt;
@@ -45,8 +46,8 @@ void ParticleGenerator::draw() {
 }
 
 void ParticleGenerator::init() {
-    GLuint vbo;
-    GLfloat particle_quad[] {
+    unsigned int vbo;
+    float particle_quad[] {
         0.0f, 1.0f, 0.0f, 1.0f,
         1.0f, 0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, 0.0f, 0.0f,
@@ -63,25 +64,25 @@ void ParticleGenerator::init() {
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, vbo));
     GL_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW));
     GL_CHECK(glEnableVertexAttribArray(0));
-    GL_CHECK(glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0));
+    GL_CHECK(glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (GLvoid*)0));
     GL_CHECK(glBindVertexArray(0));
 
-    for (GLuint i = 0; i < _amount; i += 1) {
+    for (unsigned int i = 0; i < _amount; i += 1) {
         _particles.push_back({});
     }
 }
 
-GLuint ParticleGenerator::firstUnusedParticle() {
-    static GLuint last_used_particle {0};
+unsigned int ParticleGenerator::firstUnusedParticle() {
+    static unsigned int last_used_particle {0};
 
-    for (GLuint i = last_used_particle; i < _amount; i += 1) {
+    for (unsigned int i = last_used_particle; i < _amount; i += 1) {
         if (_particles[i].life <= 0.0f) {
             last_used_particle = i;
             return i;
         }
     }
 
-    for (GLuint i = 0; i < last_used_particle; i += 1) {
+    for (unsigned int i = 0; i < last_used_particle; i += 1) {
         if (_particles[i].life <= 0.0f) {
             last_used_particle = i;
             return i;
@@ -93,8 +94,8 @@ GLuint ParticleGenerator::firstUnusedParticle() {
 }
 
 void ParticleGenerator::respawnParticle(Particle &particle, GameObject &object, glm::vec2 offset) {
-    GLfloat random = ((rand() % 100) - 50) / 10.0f;
-    GLfloat r_color = 0.5 + ((rand() % 100) / 100.0f);
+    float random = ((rand() % 100) - 50) / 10.0f;
+    float r_color = 0.5 + ((rand() % 100) / 100.0f);
 
     particle.position = object.position + random + offset;
     particle.color = glm::vec4(r_color, r_color, r_color, 1.0f);

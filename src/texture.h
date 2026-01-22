@@ -1,25 +1,17 @@
-#ifndef __TEXTURE_HEADER_GUARD__
-#define __TEXTURE_HEADER_GUARD__
-
-#include <glad/glad.h>
+#pragma once
 
 
 class Texture2D {
 public:
-    GLuint id {0};
-    GLuint width {0}, height {0};
-    GLuint internal_format {0};
-    GLuint image_format {0};
-    GLuint wrap_s {0}, wrap_t {0};
-    GLuint filter_min {0}, filter_max {0};
+    unsigned int id {0};
+    unsigned int width {0}, height {0};
+    unsigned int internal_format {0};
+    unsigned int image_format {0};
+    unsigned int wrap_s {0}, wrap_t {0};
+    unsigned int filter_min {0}, filter_max {0};
 
     Texture2D();
-    ~Texture2D();
 
-    void generate(GLuint width, GLuint height, unsigned char *data);
+    void generate(unsigned int width, unsigned int height, unsigned char *data);
     void bind() const;
-
 };
-
-
-#endif//__TEXTURE_HEADER_GUARD__

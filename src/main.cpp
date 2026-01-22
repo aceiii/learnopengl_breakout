@@ -1,6 +1,5 @@
-#include <iostream>
 #include <memory>
-#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include "util.h"
 #include "game.h"
@@ -10,8 +9,8 @@
 
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
 
-const GLuint SCREEN_WIDTH = 800;
-const GLuint SCREEN_HEIGHT = 600;
+const unsigned int SCREEN_WIDTH = 800;
+const unsigned int SCREEN_HEIGHT = 600;
 
 std::unique_ptr<Game> breakout {nullptr};
 
@@ -22,8 +21,8 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // Required on osx or crash
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true); // Required on osx or crash
+    glfwWindowHint(GLFW_RESIZABLE, false);
 
     GLFWwindow *window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Breakout", nullptr, nullptr);
 
@@ -32,11 +31,11 @@ int main() {
     int fb_width, fb_height;
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
 
-    GLfloat fb_scale = std::min(fb_width / GLfloat(SCREEN_WIDTH), fb_height / GLfloat(SCREEN_HEIGHT));
+    float fb_scale = std::min(fb_width / float(SCREEN_WIDTH), fb_height / float(SCREEN_HEIGHT));
 
     breakout = std::make_unique<Game>(SCREEN_WIDTH, SCREEN_HEIGHT, fb_scale);
 
-    // glewExperimental = GL_TRUE;
+    // glewExperimental = true;
     // glewInit();
     glGetError();
 
@@ -49,11 +48,11 @@ int main() {
 
     breakout->init();
 
-    GLfloat delta_time = 0.0f;
-    GLfloat last_frame = 0.0f;
+    float delta_time = 0.0f;
+    float last_frame = 0.0f;
 
     while (!glfwWindowShouldClose(window)) {
-        GLfloat current_frame = glfwGetTime();
+        float current_frame = glfwGetTime();
         delta_time = current_frame - last_frame;
         last_frame = current_frame;
 
@@ -82,16 +81,16 @@ void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
     UNUSED(mode);
 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GL_TRUE);
+        glfwSetWindowShouldClose(window, true);
     }
 
     if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS) {
-            breakout->keys[key] = GL_TRUE;
+            breakout->keys[key] = true;
         }
         else if (action == GLFW_RELEASE) {
-            breakout->keys[key] = GL_FALSE;
-            breakout->keys_processed[key] = GL_FALSE;
+            breakout->keys[key] = false;
+            breakout->keys_processed[key] = false;
         }
     }
 }

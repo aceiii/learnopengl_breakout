@@ -1,9 +1,10 @@
+#include <glad/glad.h>
 #include "post_process.h"
 #include "gl_check.h"
 
 #include <iostream>
 
-PostProcess::PostProcess(Shader shader_, GLuint width_, GLuint height_)
+PostProcess::PostProcess(Shader shader_, unsigned int width_, unsigned int height_)
     : post_processing_shader {shader_}, width {width_}, height {height_}
 {
     //std::cout << "PostProcess ( " << width << ',' << height << " )\n";
@@ -36,8 +37,8 @@ PostProcess::PostProcess(Shader shader_, GLuint width_, GLuint height_)
 
     post_processing_shader.setInteger("scene", 0, GL_TRUE);
 
-    GLfloat offset = 1.0f / 300.0f;
-    GLfloat offsets[9][2] = {
+    float offset = 1.0f / 300.0f;
+    float offsets[9][2] = {
         {-offset, offset},
         { 0.0f, offset},
         {offset, offset},
@@ -55,13 +56,13 @@ PostProcess::PostProcess(Shader shader_, GLuint width_, GLuint height_)
         -1, -1, -1,
     };
 
-    GLfloat blur_kernel[9] = {
+    float blur_kernel[9] = {
         1.0f / 16, 2.0f / 16, 1.0f / 16,
         2.0f / 16, 4.0f / 16, 2.0f / 16,
         1.0f / 16, 2.0f / 16, 1.0f / 16,
     };
 
-    GL_CHECK(glUniform2fv(glGetUniformLocation(post_processing_shader.id, "offsets"), 9, (GLfloat *)offsets));
+    GL_CHECK(glUniform2fv(glGetUniformLocation(post_processing_shader.id, "offsets"), 9, (float *)offsets));
     GL_CHECK(glUniform1iv(glGetUniformLocation(post_processing_shader.id, "edge_kernel"), 9, edge_kernel));
     GL_CHECK(glUniform1fv(glGetUniformLocation(post_processing_shader.id, "blur_kernel"), 9, blur_kernel));
 }
@@ -79,7 +80,7 @@ void PostProcess::endRender() {
     GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
-void PostProcess::render(GLfloat time) {
+void PostProcess::render(float time) {
     post_processing_shader.use();
     post_processing_shader.setFloat("time", time);
     post_processing_shader.setInteger("confuse", confuse);
@@ -96,8 +97,8 @@ void PostProcess::render(GLfloat time) {
 }
 
 void PostProcess::initRenderData() {
-    GLuint vbo;
-    GLfloat vertices[] = {
+    unsigned int vbo;
+    float vertices[] = {
         -1.0f, -1.0f, 0.0f, 0.0f,
          1.0f,  1.0f, 1.0f, 1.0f,
         -1.0f,  1.0f, 0.0f, 1.0f,

@@ -1,44 +1,43 @@
-#include "resource_manager.h"
-#include "gl_check.h"
-
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <glad/glad.h>
 
-// #include <SOIL.h>
+#include "resource_manager.h"
+#include "gl_check.h"
+
 
 std::map<std::string, Shader> ResourceManager::shaders;
 std::map<std::string, Texture2D> ResourceManager::textures;
 
-ResourceManager::ResourceManager() {
-}
+ResourceManager::ResourceManager() = default;
 
 void ResourceManager::clear() {
-    for (auto it : shaders) {
+    for (const auto& it : shaders) {
         GL_CHECK(glDeleteProgram(it.second.id));
     }
 
-    for (auto it : textures) {
+    for (const auto& it : textures) {
         GL_CHECK(glDeleteTextures(1, &it.second.id));
     }
 }
 
-Shader ResourceManager::loadShader(const char *vs_filename, const char *fs_filename, const char *gs_filename, const std::string &name) {
-    shaders[name] = loadShaderFromFile(vs_filename, fs_filename, gs_filename);
-    return shaders[name];
+Shader ResourceManager::loadShader(const char *vs_filename, const char *fs_filename, const char *gs_filename, std::string_view name) {
+    shaders[name.data()] = loadShaderFromFile(vs_filename, fs_filename, gs_filename);
+    return shaders[name.data()];
 }
 
-Shader ResourceManager::getShader(const std::string &name) {
-    return shaders[name];
+Shader ResourceManager::getShader(std::string_view name) {
+    return shaders[name.data()];
 }
 
-Texture2D& ResourceManager::loadTexture(const char *filename, bool alpha, const std::string &name) {
-    textures[name] = loadTextureFromFile(filename, alpha);
-    return textures[name];
+Texture2D& ResourceManager::loadTexture(const char *filename, bool alpha, std::string_view name) {
+    textures[name.data()] = loadTextureFromFile(filename, alpha);
+    return textures[name.data()];
 }
 
-Texture2D& ResourceManager::getTexture(const std::string &name) {
-    return textures[name];
+Texture2D& ResourceManager::getTexture(std::string_view name) {
+    return textures[name.data()];
 }
 
 Shader ResourceManager::loadShaderFromFile(const char *vs_filename, const char *fs_filename, const char *gs_filename) {
@@ -79,13 +78,13 @@ Shader ResourceManager::loadShaderFromFile(const char *vs_filename, const char *
             geometry_code = gs_stream.str();
         }
     }
-    catch (std::exception e) {
+    catch (std::exception& e) {
         std::cout << "ERROR::SHADER: Failed to read shader files\n";
     }
 
-    const GLchar *vs_source = vertex_code.c_str();
-    const GLchar *fs_source = fragment_code.c_str();
-    const GLchar *gs_source = geometry_code.c_str();
+    const char *vs_source = vertex_code.c_str();
+    const char *fs_source = fragment_code.c_str();
+    const char *gs_source = geometry_code.c_str();
 
     Shader shader;
     shader.compile(vs_source, fs_source, gs_filename ? gs_source : nullptr);

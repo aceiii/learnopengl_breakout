@@ -5,13 +5,13 @@ BallObject::BallObject()
 {
 }
 
-BallObject::BallObject(glm::vec2 position_, GLfloat radius_, glm::vec2 velocity_, Texture2D sprite)
+BallObject::BallObject(glm::vec2 position_, float radius_, glm::vec2 velocity_, Texture2D sprite)
     : GameObject {position_, glm::vec2 {radius_ * 2, radius_ * 2}, sprite, glm::vec3 {1.0f}, velocity_},
       radius {radius_}, is_stuck {true}
 {
 }
 
-glm::vec2 BallObject::move(GLfloat dt, GLuint window_width) {
+glm::vec2 BallObject::move(float dt, unsigned int window_width) {
     if (!is_stuck) {
         position += velocity * dt;
 
