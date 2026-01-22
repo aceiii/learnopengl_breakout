@@ -140,7 +140,7 @@ void Shader::setMatrix4(const char *name, const glm::mat4 &value, bool use_shade
     GL_CHECK(glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value)));
 }
 
-void Shader::checkCompileErrors(GLuint object, const std::string &type) {
+void Shader::checkCompileErrors(GLuint object, std::string_view type) {
     GLint success;
     GLchar info_log[1024];
 

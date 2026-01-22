@@ -1,7 +1,7 @@
 #ifndef __SHADER_HEADER_GUARD__
 #define __SHADER_HEADER_GUARD__
 
-#include <string>
+#include <string_view>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -10,7 +10,7 @@
 
 class Shader {
 public:
-    GLuint id {0};
+    unsigned int id;
 
     Shader();
     ~Shader();
@@ -30,7 +30,7 @@ public:
     void setMatrix4(const char *name, const glm::mat4 &matrix, bool use_shader = false);
 
 private:
-    void checkCompileErrors(GLuint object, const std::string &type);
+    void checkCompileErrors(unsigned int object, std::string_view type);
 };
 
 
