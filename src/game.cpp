@@ -1,3 +1,4 @@
+#include <memory>
 #include <sstream>
 #include <GLFW/glfw3.h>
 
@@ -10,20 +11,21 @@
 #include "powerup.h"
 #include "text_renderer.h"
 
-
-SpriteRenderer *renderer;
-GameObject *player;
-BallObject *ball;
-ParticleGenerator *particles;
-PostProcess *effects;
-TextRenderer *text;
-float shake_time = 0.0f;
-// SoLoud::Soloud soloud;
-// MP3Audio music_bg;
-// MP3Audio sfx_bleep1;
-// SoLoud::Wav sfx_bleep2;
-// SoLoud::Wav sfx_powerup;
-// SoLoud::Wav sfx_solid;
+namespace {
+    std::unique_ptr<SpriteRenderer> renderer;
+    std::unique_ptr<GameObject> player;
+    std::unique_ptr<BallObject> ball;
+    std::unique_ptr<ParticleGenerator> particles;
+    std::unique_ptr<PostProcess> effects;
+    std::unique_ptr<TextRenderer> text;
+    float shake_time = 0.0f;
+    // SoLoud::Soloud soloud;
+    // MP3Audio music_bg;
+    // MP3Audio sfx_bleep1;
+    // SoLoud::Wav sfx_bleep2;
+    // SoLoud::Wav sfx_powerup;
+    // SoLoud::Wav sfx_solid;
+}
 
 Direction vectorDirection(glm::vec2 target) {
     glm::vec2 compass[] = {
@@ -118,12 +120,11 @@ bool isOtherPowerUpActive(std::vector<PowerUp> &powerups, const std::string &typ
 }
 
 Game::Game(unsigned int width_, unsigned int height_, float scale_)
-    : state {GAME_MENU}, keys {}, width {width_}, height {height_}, scale {scale_}, lives {3}
+    : width {width_}, height {height_}, scale {scale_}
 {
 }
 
-Game::~Game() {
-}
+Game::~Game() = default;
 
 void Game::init() {
     // soloud.init();
@@ -152,11 +153,11 @@ void Game::init() {
     ResourceManager::loadTexture("res/textures/powerup_chaos.png", true, "powerup_chaos");
     ResourceManager::loadTexture("res/textures/powerup_passthrough.png", true, "powerup_passthrough");
 
-    renderer = new SpriteRenderer(ResourceManager::getShader("sprite"));
-    particles = new ParticleGenerator(ResourceManager::getShader("particle"), ResourceManager::getTexture("particle"), 500);
-    effects = new PostProcess(ResourceManager::getShader("postprocessing"), width * scale, height * scale);
+    renderer = std::make_unique<SpriteRenderer>(ResourceManager::getShader("sprite"));
+    particles = std::make_unique<ParticleGenerator>(ResourceManager::getShader("particle"), ResourceManager::getTexture("particle"), 500);
+    effects = std::make_unique<PostProcess>(ResourceManager::getShader("postprocessing"), width * scale, height * scale);
 
-    text = new TextRenderer(width, height);
+    text = std::make_unique<TextRenderer>(width, height);
     text->load("res/fonts/ocraext.ttf", 24);
 
     GameLevel one, two, three, four;
@@ -173,8 +174,8 @@ void Game::init() {
     glm::vec2 player_pos {width / 2 - PLAYER_SIZE.x / 2, height - PLAYER_SIZE.y};
     glm::vec2 ball_pos {player_pos + glm::vec2 {PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2}};
 
-    player = new GameObject {player_pos, PLAYER_SIZE, ResourceManager::getTexture("paddle")};
-    ball = new BallObject {ball_pos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::getTexture("face")};
+    player = std::make_unique<GameObject>(player_pos, PLAYER_SIZE, ResourceManager::getTexture("paddle"));
+    ball = std::make_unique<BallObject>(ball_pos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::getTexture("face"));
 
     // music_bg.load("res/audio/breakout.mp3");
     // music_bg.setLooping(true);
@@ -263,7 +264,7 @@ void Game::update(float dt) {
         }
     }
 
-    if (ball->position.y >= height) {
+    if (ball->position.y >= static_cast<float>(height)) {
         lives -= 1;
 
         if (lives == 0) {

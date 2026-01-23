@@ -7,10 +7,6 @@
 PostProcess::PostProcess(Shader shader_, unsigned int width_, unsigned int height_)
     : post_processing_shader {shader_}, width {width_}, height {height_}
 {
-    return;
-
-    //std::cout << "PostProcess ( " << width << ',' << height << " )\n";
-
     GL_CHECK(glGenFramebuffers(1, &_msfbo));
     GL_CHECK(glGenFramebuffers(1, &_fbo));
     GL_CHECK(glGenRenderbuffers(1, &_rbo));
@@ -118,7 +114,7 @@ void PostProcess::initRenderData() {
 
     GL_CHECK(glBindVertexArray(_vao));
     GL_CHECK(glEnableVertexAttribArray(0));
-    GL_CHECK(glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), (GLvoid *)0));
+    GL_CHECK(glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr));
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
     GL_CHECK(glBindVertexArray(0));
 }

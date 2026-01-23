@@ -23,21 +23,23 @@ void ResourceManager::clear() {
 }
 
 Shader ResourceManager::loadShader(const char *vs_filename, const char *fs_filename, const char *gs_filename, std::string_view name) {
-    shaders[name.data()] = loadShaderFromFile(vs_filename, fs_filename, gs_filename);
-    return shaders[name.data()];
+    std::string key(name);
+    shaders[key] = loadShaderFromFile(vs_filename, fs_filename, gs_filename);
+    return shaders[key];
 }
 
 Shader ResourceManager::getShader(std::string_view name) {
-    return shaders[name.data()];
+    return shaders[std::string(name)];
 }
 
 Texture2D& ResourceManager::loadTexture(const char *filename, bool alpha, std::string_view name) {
-    textures[name.data()] = loadTextureFromFile(filename, alpha);
-    return textures[name.data()];
+    std::string key(name);
+    textures[key] = loadTextureFromFile(filename, alpha);
+    return textures[key];
 }
 
 Texture2D& ResourceManager::getTexture(std::string_view name) {
-    return textures[name.data()];
+    return textures[std::string(name)];
 }
 
 Shader ResourceManager::loadShaderFromFile(const char *vs_filename, const char *fs_filename, const char *gs_filename) {

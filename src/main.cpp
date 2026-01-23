@@ -1,4 +1,6 @@
 #include <memory>
+#include <print>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "util.h"
@@ -35,8 +37,11 @@ int main() {
 
     breakout = std::make_unique<Game>(SCREEN_WIDTH, SCREEN_HEIGHT, fb_scale);
 
-    // glewExperimental = true;
-    // glewInit();
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
+        std::println("Failed to initialize GLAD");
+        return -1;
+    }
+
     glGetError();
 
     glfwSetKeyCallback(window, keyCallback);
@@ -48,25 +53,26 @@ int main() {
 
     breakout->init();
 
-    float delta_time = 0.0f;
-    float last_frame = 0.0f;
+    double delta_time = 0.0f;
+    double last_frame = 0.0f;
 
     while (!glfwWindowShouldClose(window)) {
-       float current_frame = glfwGetTime();
-       delta_time = current_frame - last_frame;
-       last_frame = current_frame;
+        const auto current_frame = glfwGetTime();
+        delta_time = current_frame - last_frame;
+        last_frame = current_frame;
 
-       glfwPollEvents();
+        glfwPollEvents();
 
-       breakout->processInput(delta_time);
-       breakout->update(delta_time);
+        const auto dt = static_cast<float>(delta_time);
+        breakout->processInput(dt);
+        breakout->update(dt);
 
-       GL_CHECK(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-       GL_CHECK(glClear(GL_COLOR_BUFFER_BIT));
+        GL_CHECK(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+        GL_CHECK(glClear(GL_COLOR_BUFFER_BIT));
 
-       breakout->render();
- 
-       glfwSwapBuffers(window);
+        breakout->render();
+
+        glfwSwapBuffers(window);
     }
 
     ResourceManager::clear();
