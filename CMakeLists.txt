@@ -38,29 +38,10 @@ add_subdirectory(external/glm)
 add_subdirectory(external/freetype)
 add_subdirectory(external/glfw)
 
-#find_library(GLEW_LIBRARY glew REQUIRED)
-#set(LIBS ${LIBS} ${GLEW_LIBRARY})
-
-#add_subdirectory(external/glew/build/cmake)
-#
-#set(SOIL_LIBRARY soil)
-#
-#set(LIBS ${LIBS} ${SOIL_LIBRARY})
-#
-#find_library(GLFW_LIBRARY glfw3 REQUIRED)
-#set(LIBS ${LIBS} ${GLFW_LIBRARY})
-#
-##find_library(SOLOUD_LIBRARY soloud REQUIRED)
-#add_subdirectory(external/soloud/contrib)
-#set(LIBS ${LIBS} ${SOLOUD_LIBRARY})
-#
-#find_package(Freetype REQUIRED)
-#include_directories(${FREETYPE_INCLUDE_DIRS})
-#set(LIBS ${LIBS} ${FREETYPE_LIBRARIES})
-
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE external/glad/include)
+target_include_directories(${PROJECT_NAME} PRIVATE external/stb)
 
 target_link_libraries(${PROJECT_NAME} ${LIBS} glm freetype glfw)
 
