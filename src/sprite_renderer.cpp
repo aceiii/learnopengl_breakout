@@ -16,7 +16,7 @@ SpriteRenderer::~SpriteRenderer() {
 void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color) {
     _shader.use();
 
-    glm::mat4 model;
+    glm::mat4 model = glm::identity<glm::mat4>();
     model = glm::translate(model, glm::vec3(position, 0.0f));
 
     model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
@@ -37,8 +37,8 @@ void SpriteRenderer::drawSprite(Texture2D &texture, glm::vec2 position, glm::vec
 }
 
 void SpriteRenderer::initRenderData() {
-    GLuint vbo;
-    GLfloat vertices[] = {
+    unsigned int vbo;
+    float vertices[] = {
         0.0f, 1.0f, 0.0f, 1.0f,
         1.0f, 0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, 0.0f, 0.0f,
@@ -56,7 +56,7 @@ void SpriteRenderer::initRenderData() {
 
     GL_CHECK(glBindVertexArray(_quad_vao));
     GL_CHECK(glEnableVertexAttribArray(0));
-    GL_CHECK(glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid *)0));
+    GL_CHECK(glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr));
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
     GL_CHECK(glBindVertexArray(0));
 }

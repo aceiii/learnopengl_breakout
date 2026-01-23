@@ -1,5 +1,6 @@
 #include <memory>
 #include <sstream>
+#include <format>
 #include <GLFW/glfw3.h>
 #include <miniaudio.h>
 
@@ -128,7 +129,6 @@ Game::~Game() = default;
 
 void Game::init() {
     // soloud.init();
-
     ResourceManager::loadShader("res/shaders/sprite_vs.glsl", "res/shaders/sprite_fs.glsl", {}, "sprite");
     ResourceManager::loadShader("res/shaders/particle_vs.glsl", "res/shaders/particle_fs.glsl", {}, "particle");
     ResourceManager::loadShader("res/shaders/postprocessing_vs.glsl", "res/shaders/postprocessing_fs.glsl", {}, "postprocessing");
@@ -307,10 +307,7 @@ void Game::render() {
         effects->endRender();
         effects->render(static_cast<float>(glfwGetTime()));
 
-        std::stringstream ss;
-        ss << lives;
-
-        text->renderText("Lives: " + ss.str(), 5.0f, 5.0f, 1.0f);
+        text->renderText(std::format("Lives: {}", lives), 5.0f, 5.0f, 1.0f);
     }
 
     if (state == GameState::GAME_MENU) {
