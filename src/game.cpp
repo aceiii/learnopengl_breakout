@@ -45,7 +45,7 @@ Direction vectorDirection(glm::vec2 target) {
         }
     }
 
-    return (Direction)best_match;
+    return static_cast<Direction>(best_match);
 }
 
 bool checkCollision(GameObject &a, GameObject &b) {
@@ -303,7 +303,7 @@ void Game::render() {
             ball->draw(*renderer);
         }
         effects->endRender();
-        effects->render(glfwGetTime());
+        effects->render(static_cast<float>(glfwGetTime()));
 
         std::stringstream ss;
         ss << lives;
