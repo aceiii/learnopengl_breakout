@@ -28,17 +28,16 @@ namespace {
 }
 
 Direction vectorDirection(glm::vec2 target) {
-    glm::vec2 compass[] = {
-        {0.0f, 1.0f},  // up
-        {1.0f, 0.0f},  // right
-        {0.0f, -1.0f}, // down
-        {-1.0f, 0.0f}, //left
-    };
-
     float max {0.0f};
     unsigned int best_match = -1;
 
     for (unsigned int i = 0; i < 4; i += 1) {
+        static constexpr glm::vec2 compass[] = {
+            {0.0f, 1.0f},  // up
+            {1.0f, 0.0f},  // right
+            {0.0f, -1.0f}, // down
+            {-1.0f, 0.0f}, //left
+        };
         float dot_product = glm::dot(glm::normalize(target), compass[i]);
         if (dot_product > max) {
             max = dot_product;
@@ -72,7 +71,7 @@ Collision checkCollision(BallObject &a, GameObject &b) {
         return std::make_tuple(true, vectorDirection(difference), difference);
     }
 
-    return std::make_tuple(false, UP, glm::vec2 {0, 0});
+    return std::make_tuple(false, Direction::UP, glm::vec2 {0, 0});
 }
 
 bool shouldSpawn(unsigned int chance) {
@@ -189,7 +188,7 @@ void Game::init() {
 }
 
 void Game::processInput(float dt) {
-    if (state == GAME_ACTIVE) {
+    if (state == GameState::GAME_ACTIVE) {
         float velocity = PLAYER_VELOCITY * dt;
 
         if (keys[GLFW_KEY_A]) {
@@ -225,10 +224,10 @@ void Game::processInput(float dt) {
         }
     }
 
-    if (state == GAME_MENU) {
+    if (state == GameState::GAME_MENU) {
         if (keys[GLFW_KEY_ENTER] && !keys_processed[GLFW_KEY_ENTER]) {
             keys_processed[GLFW_KEY_ENTER] = true;
-            state = GAME_ACTIVE;
+            state = GameState::GAME_ACTIVE;
         }
 
         if (keys[GLFW_KEY_W] && !keys_processed[GLFW_KEY_W]) {
@@ -269,22 +268,22 @@ void Game::update(float dt) {
 
         if (lives == 0) {
             resetLevel();
-            state = GAME_MENU;
+            state = GameState::GAME_MENU;
         }
 
         resetPlayer();
     }
 
-    if (state == GAME_ACTIVE && levels[level].isCompleted()) {
+    if (state == GameState::GAME_ACTIVE && levels[level].isCompleted()) {
         resetLevel();
         resetPlayer();
         effects->chaos = true;
-        state = GAME_WIN;
+        state = GameState::GAME_WIN;
     }
 }
 
 void Game::render() {
-    if (state == GAME_ACTIVE || state == GAME_MENU || state == GAME_WIN) {
+    if (state == GameState::GAME_ACTIVE || state == GameState::GAME_MENU || state == GameState::GAME_WIN) {
 
         effects->beginRender();
         {
@@ -312,12 +311,12 @@ void Game::render() {
         text->renderText("Lives: " + ss.str(), 5.0f, 5.0f, 1.0f);
     }
 
-    if (state == GAME_MENU) {
+    if (state == GameState::GAME_MENU) {
         text->renderText("Press ENTER to start", 250.0f, height / 2.0, 1.0f);
         text->renderText("Press W or S to select a level", 245.0f, height / 2.0 + 20.0f, 0.75f);
     }
 
-    if (state == GAME_WIN) {
+    if (state == GameState::GAME_WIN) {
         text->renderText("YOU WON!!!1", 320.0f, (height / 2.0f) - 20.0f, 1.0f, glm::vec3 {0.0f, 1.0f, 0.0f});
         text->renderText("Press ENTER to retry or ESC to quit", 130.0f, height / 2.0f, 1.0f, glm::vec3 {1.0f, 1.0f, 0.0f});
     }
@@ -343,11 +342,11 @@ void Game::doCollisions() {
                 glm::vec2 diff_vector = std::get<2>(collision);
 
                 if (!(ball->is_passthrough && !box.is_solid)) {
-                    if (dir == LEFT || dir == RIGHT) {
+                    if (dir == Direction::LEFT || dir == Direction::RIGHT) {
                         ball->velocity.x = -ball->velocity.x;
 
                         float penetration = ball->radius - std::abs(diff_vector.x);
-                        if (dir == LEFT) {
+                        if (dir == Direction::LEFT) {
                             ball->position.x += penetration;
                         } else {
                             ball->position.x -= penetration;
@@ -356,7 +355,7 @@ void Game::doCollisions() {
                         ball->velocity.y = -ball->velocity.y;
 
                         float penetration = ball->radius - std::abs(diff_vector.y);
-                        if (dir == UP) {
+                        if (dir == Direction::UP) {
                             ball->position.y -= penetration;
                         } else {
                             ball->position.y += penetration;
