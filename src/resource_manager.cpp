@@ -3,6 +3,9 @@
 #include <fstream>
 #include <glad/glad.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 #include "resource_manager.h"
 #include "gl_check.h"
 
@@ -96,17 +99,17 @@ Shader ResourceManager::loadShaderFromFile(const char *vs_filename, const char *
 
 Texture2D ResourceManager::loadTextureFromFile(const char *filename, bool alpha) {
     Texture2D texture;
-    // if (alpha) {
-    //     texture.internal_format = GL_RGBA;
-    //     texture.image_format = GL_RGBA;
-    // }
-    //
-    // int width, height;
-    // unsigned char *image = SOIL_load_image(filename, &width, &height, 0, texture.image_format == GL_RGBA ? SOIL_LOAD_RGBA : SOIL_LOAD_RGB);
-    //
-    // texture.generate(width, height, image);
-    //
-    // SOIL_free_image_data(image);
+    if (alpha) {
+        texture.internal_format = GL_RGBA;
+        texture.image_format = GL_RGBA;
+    }
+
+    int width, height;
+    unsigned char *image = stbi_load(filename, &width, &height, nullptr, texture.image_format == GL_RGBA ? STBI_rgb_alpha : STBI_rgb);
+
+    texture.generate(width, height, image);
+
+    stbi_image_free(image);
 
     return texture;
 }
