@@ -37,13 +37,14 @@ endif()
 add_subdirectory(external/glm)
 add_subdirectory(external/freetype)
 add_subdirectory(external/glfw)
+add_subdirectory(external/miniaudio)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE external/glad/include)
 target_include_directories(${PROJECT_NAME} PRIVATE external/stb)
 
-target_link_libraries(${PROJECT_NAME} ${LIBS} glm freetype glfw)
+target_link_libraries(${PROJECT_NAME} ${LIBS} glm freetype glfw miniaudio)
 
 if(NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
     add_custom_target(symlink-resources ALL COMMAND
