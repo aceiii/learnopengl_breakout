@@ -12,7 +12,7 @@ public:
     unsigned int width {0}, height {0};
     bool confuse {false}, chaos {false}, shake {false};
 
-    PostProcess(Shader shader, unsigned int width, unsigned int height);
+    PostProcess(const Shader &shader, unsigned int width, unsigned int height);
 
     void beginRender();
     void endRender();

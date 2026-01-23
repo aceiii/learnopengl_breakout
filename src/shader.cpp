@@ -148,16 +148,18 @@ void Shader::checkCompileErrors(unsigned int object, std::string_view type) {
         GL_CHECK(glGetShaderiv(object, GL_COMPILE_STATUS, &success));
         if (!success) {
             GL_CHECK(glGetShaderInfoLog(object, sizeof(info_log), nullptr, info_log));
-            std::cout << "| ERROR::SHADER: Compile-time error: Type: " << type << '\n'
-                << info_log << "\n -- ---------------------------------------------------- -- \n";
+            std::println("| ERROR::SHADER: Compile-time error: Type: {}", type);
+            std::println("{}", info_log);
+            std::println(" -- ---------------------------------------------------- -- ");
         }
     }
     else {
         GL_CHECK(glGetProgramiv(object, GL_LINK_STATUS, &success));
         if (!success) {
             GL_CHECK(glGetProgramInfoLog(object, sizeof(info_log), nullptr, info_log));
-            std::cout << "| ERROR::SHADER: Link-time error: Type: " << type << '\n'
-                << info_log << "\n -- ---------------------------------------------------- -- \n";
+            std::println("| ERROR::SHADER: Link-time error: Type: {}", type);
+            std::println("{}", info_log);
+            std::println(" -- ---------------------------------------------------- -- ");
         }
     }
 }

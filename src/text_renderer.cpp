@@ -1,4 +1,4 @@
-#include <iostream>
+#include <print>
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <ft2build.h>
@@ -25,17 +25,19 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height) {
     GL_CHECK(glBindVertexArray(0));
 }
 
-void TextRenderer::load(const std::string &font, unsigned int font_size) {
+void TextRenderer::load(std::string_view font, unsigned int font_size) {
+    std::println("TextRenderer: loading font '{}', size: {}", font, font_size);
+
     characters.clear();
 
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
-        std::cout << "ERROR::FREETYPE: Could not init FreeType Library\n";
+        std::println("ERROR::FREETYPE: Could not init FreeType Library");
     }
 
     FT_Face face;
-    if (FT_New_Face(ft, font.c_str(), 0, &face)) {
-        std::cout << "ERROR::FREETYPE: Failed to load font '" << font << "'\n";
+    if (FT_New_Face(ft, std::string(font).c_str(), 0, &face)) {
+        std::println("ERROR::FREETYPE: Failed to load font '{}'", font);
     }
 
     FT_Set_Pixel_Sizes(face, 0, font_size);
@@ -44,7 +46,7 @@ void TextRenderer::load(const std::string &font, unsigned int font_size) {
 
     for (unsigned char c = 0; c < 128; c += 1) {
         if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-            std::cout << "ERROR::FREETYPE: Failed to load Glyph\n";
+            std::println("ERROR::FREETYPE: Failed to load Glyph");
             continue;
         }
 
@@ -77,7 +79,7 @@ void TextRenderer::load(const std::string &font, unsigned int font_size) {
     FT_Done_FreeType(ft);
 }
 
-void TextRenderer::renderText(const std::string &text, float x, float y, float scale, glm::vec3 color) {
+void TextRenderer::renderText(std::string_view text, float x, float y, float scale, glm::vec3 color) {
     text_shader.use();
     text_shader.setVector3f("text_color", color);
 
@@ -108,7 +110,7 @@ void TextRenderer::renderText(const std::string &text, float x, float y, float s
         GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
         GL_CHECK(glDrawArrays(GL_TRIANGLES, 0, 6));
 
-        x += (ch.advance >> 6) * scale;
+        x += static_cast<float>(ch.advance >> 6) * scale;
     }
 
     GL_CHECK(glBindVertexArray(0));

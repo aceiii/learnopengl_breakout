@@ -22,10 +22,9 @@ void checkOpenglError(const char *statement, const char *file, int line) {
 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        std::cout
-            << "ERROR: " << error_map[error] << '(' << error << ")\n"
-            << "     > " << file << ':' << line << '\n'
-            << "     > `" << statement << "`\n";
+        std::println("ERROR: {} ({})", error_map[error], error);
+        std::println("     > {}:{}", file, line);
+        std::println("     > `{}", statement);
         exit(1);
     }
 }

@@ -55,11 +55,11 @@ Shader ResourceManager::loadShaderFromFile(const char *vs_filename, const char *
         std::ifstream fs_file {fs_filename};
 
         if (!vs_file) {
-            std::cout << "ERROR::SHADER: Failed to read file '" << vs_filename << "'\n";
+            std::println("ERROR::SHADER: Failed to read file '{}'", vs_filename);
         }
 
         if (!fs_file) {
-            std::cout << "ERROR::SHADER: Failed to read file '" << fs_filename << "'\n";
+            std::println("ERROR::SHADER: Failed to read file '{}'", fs_filename);
         }
 
         std::stringstream vs_stream, fs_stream;
@@ -84,7 +84,7 @@ Shader ResourceManager::loadShaderFromFile(const char *vs_filename, const char *
         }
     }
     catch (std::exception& e) {
-        std::cout << "ERROR::SHADER: Failed to read shader files\n";
+        std::println("ERROR::SHADER: Failed to read shader files");
     }
 
     const char *vs_source = vertex_code.c_str();

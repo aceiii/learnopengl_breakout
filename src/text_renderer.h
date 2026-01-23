@@ -21,11 +21,11 @@ public:
 
     TextRenderer(unsigned int width, unsigned int height);
 
-    void load(const std::string &font, unsigned int font_size);
-    void renderText(const std::string &text, float x, float y, float scale, glm::vec3 color = glm::vec3 {1.0f});
+    void load(std::string_view font, unsigned int font_size);
+    void renderText(std::string_view text, float x, float y, float scale, glm::vec3 color = glm::vec3 {1.0f});
 
 private:
-    unsigned int _vao;
-    unsigned int _vbo;
+    unsigned int _vao {};
+    unsigned int _vbo {};
 
 };

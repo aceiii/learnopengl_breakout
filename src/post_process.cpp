@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-PostProcess::PostProcess(Shader shader_, unsigned int width_, unsigned int height_)
+PostProcess::PostProcess(const Shader &shader_, unsigned int width_, unsigned int height_)
     : post_processing_shader {shader_}, width {width_}, height {height_}
 {
     GL_CHECK(glGenFramebuffers(1, &_msfbo));
@@ -17,7 +17,7 @@ PostProcess::PostProcess(Shader shader_, unsigned int width_, unsigned int heigh
     GL_CHECK(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _rbo));
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        std::cout << "ERROR::POSTPROCESSOR: Failed to initialize MSFBO\n";
+        std::println("ERROR::POSTPROCESSOR: Failed to initialize MSFBO");
     }
 
     GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, _fbo));
@@ -26,7 +26,7 @@ PostProcess::PostProcess(Shader shader_, unsigned int width_, unsigned int heigh
 
     GL_CHECK(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.id, 0));
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        std::cout << "ERROR::POSTPROCESSOR: Failed to initialize FBO\n";
+        std::println("ERROR::POSTPROCESSOR: Failed to initialize FBO");
     }
 
     GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0));
@@ -60,7 +60,7 @@ PostProcess::PostProcess(Shader shader_, unsigned int width_, unsigned int heigh
         1.0f / 16, 2.0f / 16, 1.0f / 16,
     };
 
-    GL_CHECK(glUniform2fv(glGetUniformLocation(post_processing_shader.id, "offsets"), 9, (float *)offsets));
+    GL_CHECK(glUniform2fv(glGetUniformLocation(post_processing_shader.id, "offsets"), 9, reinterpret_cast<const float*>(&offsets[0])));
     GL_CHECK(glUniform1iv(glGetUniformLocation(post_processing_shader.id, "edge_kernel"), 9, edge_kernel));
     GL_CHECK(glUniform1fv(glGetUniformLocation(post_processing_shader.id, "blur_kernel"), 9, blur_kernel));
 }
