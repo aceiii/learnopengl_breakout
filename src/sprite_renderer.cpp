@@ -1,3 +1,4 @@
+#include <print>
 #include <glad/glad.h>
 #include "sprite_renderer.h"
 #include "gl_check.h"
@@ -59,4 +60,3 @@ void SpriteRenderer::initRenderData() {
     GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
     GL_CHECK(glBindVertexArray(0));
 }
-

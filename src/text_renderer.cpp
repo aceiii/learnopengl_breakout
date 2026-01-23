@@ -10,7 +10,8 @@
 
 
 TextRenderer::TextRenderer(unsigned int width, unsigned int height) {
-    text_shader = ResourceManager::loadShader("res/shaders/text_vs.glsl", "res/shaders/text_fs.glsl", nullptr, "text");
+    std::println("TextRender::TextRenderer: ({}, {})", width, height);
+    text_shader = ResourceManager::loadShader("res/shaders/text_vs.glsl", "res/shaders/text_fs.glsl", {}, "text");
     text_shader.setMatrix4("projection",  glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f), GL_TRUE);
     text_shader.setInteger("text", 0);
 

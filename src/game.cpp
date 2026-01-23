@@ -1,6 +1,7 @@
 #include <memory>
 #include <sstream>
 #include <GLFW/glfw3.h>
+#include <miniaudio.h>
 
 #include "game.h"
 #include "resource_manager.h"
@@ -128,9 +129,9 @@ Game::~Game() = default;
 void Game::init() {
     // soloud.init();
 
-    ResourceManager::loadShader("res/shaders/sprite_vs.glsl", "res/shaders/sprite_fs.glsl", nullptr, "sprite");
-    ResourceManager::loadShader("res/shaders/particle_vs.glsl", "res/shaders/particle_fs.glsl", nullptr, "particle");
-    ResourceManager::loadShader("res/shaders/postprocessing_vs.glsl", "res/shaders/postprocessing_fs.glsl", nullptr, "postprocessing");
+    ResourceManager::loadShader("res/shaders/sprite_vs.glsl", "res/shaders/sprite_fs.glsl", {}, "sprite");
+    ResourceManager::loadShader("res/shaders/particle_vs.glsl", "res/shaders/particle_fs.glsl", {}, "particle");
+    ResourceManager::loadShader("res/shaders/postprocessing_vs.glsl", "res/shaders/postprocessing_fs.glsl", {}, "postprocessing");
 
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
 
@@ -284,23 +285,24 @@ void Game::update(float dt) {
 
 void Game::render() {
     if (state == GameState::GAME_ACTIVE || state == GameState::GAME_MENU || state == GameState::GAME_WIN) {
+        auto &rd = *renderer;
 
         effects->beginRender();
         {
             renderer->drawSprite(ResourceManager::getTexture("background"),
                     glm::vec2(0, 0), glm::vec2(width, height), 0.0f);
 
-            levels[level].draw(*renderer);
+            levels[level].draw(rd);
 
             for (PowerUp &powerup : powerups) {
                 if (!powerup.is_destroyed) {
-                    powerup.draw(*renderer);
+                    powerup.draw(rd);
                 }
             }
 
-            player->draw(*renderer);
+            player->draw(rd);
             particles->draw();
-            ball->draw(*renderer);
+            ball->draw(rd);
         }
         effects->endRender();
         effects->render(static_cast<float>(glfwGetTime()));
@@ -478,8 +480,8 @@ void Game::updatePowerUps(float dt) {
         }
     }
 
-    powerups.erase(std::remove_if(powerups.begin(), powerups.end(), [] (const PowerUp &powerup) {
-        return powerup.is_destroyed && !powerup.is_activated;
-    }), powerups.end());
+    std::erase_if(powerups, [](const PowerUp &p) {
+        return p.is_destroyed && !p.is_activated;
+    });
 }
 
