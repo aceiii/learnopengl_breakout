@@ -1,6 +1,6 @@
 [submodule "external/soloud"]
 	path = external/soloud
-	url = https://github.com/jarikomppa/soloud.git
+	url = git@github.com:aceiii/soloud.git
 [submodule "external/glm"]
 	path = external/glm
 	url = https://github.com/g-truc/glm.git
