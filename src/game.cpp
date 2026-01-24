@@ -2,7 +2,8 @@
 #include <sstream>
 #include <format>
 #include <GLFW/glfw3.h>
-#include <miniaudio.h>
+#include <soloud.h>
+#include <soloud_wav.h>
 
 #include "game.h"
 #include "resource_manager.h"
@@ -12,6 +13,7 @@
 #include "post_process.h"
 #include "powerup.h"
 #include "text_renderer.h"
+#include "mp3audio.h"
 
 namespace {
     std::unique_ptr<SpriteRenderer> renderer;
@@ -21,12 +23,12 @@ namespace {
     std::unique_ptr<PostProcess> effects;
     std::unique_ptr<TextRenderer> text;
     float shake_time = 0.0f;
-    // SoLoud::Soloud soloud;
-    // MP3Audio music_bg;
-    // MP3Audio sfx_bleep1;
-    // SoLoud::Wav sfx_bleep2;
-    // SoLoud::Wav sfx_powerup;
-    // SoLoud::Wav sfx_solid;
+    SoLoud::Soloud soloud;
+    MP3Audio music_bg;
+    MP3Audio sfx_bleep1;
+    SoLoud::Wav sfx_bleep2;
+    SoLoud::Wav sfx_powerup;
+    SoLoud::Wav sfx_solid;
 }
 
 Direction vectorDirection(glm::vec2 target) {
@@ -128,7 +130,7 @@ Game::Game(unsigned int width_, unsigned int height_, float scale_)
 Game::~Game() = default;
 
 void Game::init() {
-    // soloud.init();
+    soloud.init();
     ResourceManager::loadShader("res/shaders/sprite_vs.glsl", "res/shaders/sprite_fs.glsl", {}, "sprite");
     ResourceManager::loadShader("res/shaders/particle_vs.glsl", "res/shaders/particle_fs.glsl", {}, "particle");
     ResourceManager::loadShader("res/shaders/postprocessing_vs.glsl", "res/shaders/postprocessing_fs.glsl", {}, "postprocessing");
@@ -177,15 +179,15 @@ void Game::init() {
     player = std::make_unique<GameObject>(player_pos, PLAYER_SIZE, ResourceManager::getTexture("paddle"));
     ball = std::make_unique<BallObject>(ball_pos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::getTexture("face"));
 
-    // music_bg.load("res/audio/breakout.mp3");
-    // music_bg.setLooping(true);
-    //
-    // sfx_bleep1.load("res/audio/bleep.mp3");
-    // sfx_bleep2.load("res/audio/bleep.wav");
-    // sfx_powerup.load("res/audio/powerup.wav");
-    // sfx_solid.load("res/audio/solid.wav");
-    //
-    // soloud.play(music_bg);
+    music_bg.load("res/audio/breakout.mp3");
+    music_bg.setLooping(true);
+
+    sfx_bleep1.load("res/audio/bleep.mp3");
+    sfx_bleep2.load("res/audio/bleep.wav");
+    sfx_powerup.load("res/audio/powerup.wav");
+    sfx_solid.load("res/audio/solid.wav");
+
+    soloud.play(music_bg);
 }
 
 void Game::processInput(float dt) {
